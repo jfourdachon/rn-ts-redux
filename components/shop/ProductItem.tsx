@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../../constants/Colors';
 import Touchable from '../touchable/Touchable';
 
@@ -15,7 +14,7 @@ type IProps = {
 const ProductItem = ({ title, price, imageUrl, onViewDetail, onAddToCart }: IProps) => {
   return (
     <View style={styles.product}>
-      <Touchable onPress={onViewDetail}>
+      <Touchable onPress={onViewDetail} useForeground>
         <View>
           <Image style={styles.iamge} source={{ uri: imageUrl }} />
           <View style={styles.details}>
@@ -56,11 +55,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    marginVertical: 4,
+    marginVertical: 2,
+    fontFamily:  'open-sans-bold'
   },
   price: {
     fontSize: 14,
     color: '#888',
+    fontFamily:  'open-sans'
+
   },
   buttonsContainer: {
     flexDirection: 'row',
