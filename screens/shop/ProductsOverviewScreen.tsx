@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import { ROOT_STATE } from '../../store/combineReducers';
 
-const ProductsOverviewScreen: NavigationStackScreenComponent = () => {
+const ProductsOverviewScreen: NavigationStackScreenComponent = ({navigation}) => {
   const products = useSelector((state: ROOT_STATE) => state.products.availableProducts);
   return (
     <FlatList
@@ -16,7 +16,10 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = () => {
           title={itemData.item.title}
           imageUrl={itemData.item.imageUrl}
           price={itemData.item.price}
-          onViewDetail={() => {}}
+          onViewDetail={() => {navigation.navigate('ProductDetail', {
+              productId: itemData.item.id,
+              productTitle: itemData.item.title
+          })}}
           onAddToCart={() => {}}
         />
       )}
