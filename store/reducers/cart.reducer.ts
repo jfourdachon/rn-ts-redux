@@ -2,20 +2,20 @@ import CartItem from "../../models/cart-item"
 import Product from "../../models/product"
 import { AddToCartAction, ADD_TO_CART } from "../actions/cart.actions"
 
-type Item = {
+export type ItemCart = {
     // TODO Probably find a better way to bind CartItem type
-    [id: string]: { price: number, quantity: number, title: string, sum: number };
+    [id: string]: { productPrice: number, quantity: number, productTitle: string, sum: number };
 }
 
 
 export type CART_ITEMS_STATE = {
-    items: keyof Item;
+    items: ItemCart;
     totalAmount: number;
 }
 
 
 const initialState = {
-    items: <Item>{},
+    items: <ItemCart>{},
     totalAmount: 0
 
 }

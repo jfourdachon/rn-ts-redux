@@ -7,14 +7,26 @@ import { ROOT_STATE } from '../../store/combineReducers';
 const CartScreen = () => {
 
 const cartTotalAmount = useSelector((state: ROOT_STATE) => state.cart.totalAmount)
-
+const cartItems = useSelector((state: ROOT_STATE) => {
+    const transformedCartItems= []
+    for(const key in state.cart.items) {
+        transformedCartItems.push({
+            productId: key,
+            productTitle: state.cart.items[key].productTitle,
+            productPrice: state.cart.items[key].productPrice,
+            quantity: state.cart.items[key].quantity,
+            sum: state.cart.items[key].sum,
+        })
+    }
+    return transformedCartItems
+})
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
-          Total: <Text style={styles.amount}>${cartTotalAmount}</Text>
+          Total: <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
         </Text>
-        <Button title='Order Now' onPress={() => {}} />
+        <Button title='Order Now' onPress={() => {}} color={Colors.accent} disabled={cartItems.length === 0} />
       </View>
       <View>
         <Text>Cart Items</Text>
