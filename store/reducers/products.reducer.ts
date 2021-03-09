@@ -3,8 +3,6 @@ import PRODUCTS from '../../data/dummy-data'
 
 export type PRODUCT_STATE = {
     availableProducts: Product[],
-    filteredMeals: Product[],
-    favoriteMeals: Product[]
 }
 
 const initialState = {

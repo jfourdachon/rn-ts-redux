@@ -5,6 +5,7 @@ import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/Colors';
 import { ROOT_STATE } from '../../store/combineReducers';
 import * as cartActions from '../../store/actions/cart.actions';
+import * as orderActions from '../../store/actions/order.actions'
 
 
 const CartScreen = () => {
@@ -13,14 +14,14 @@ const CartScreen = () => {
     const transformedCartItems = [];
     for (const key in state.cart.items) {
       transformedCartItems.push({
-        productId: key,
+        id: key,
         productTitle: state.cart.items[key].productTitle,
         productPrice: state.cart.items[key].productPrice,
         quantity: state.cart.items[key].quantity,
         sum: state.cart.items[key].sum,
       });
     }
-    return transformedCartItems.sort((a,b) => a.productId > b.productId ? 1 : -1);
+    return transformedCartItems.sort((a,b) => a.id > b.id ? 1 : -1);
   });
   const dispatch = useDispatch()
   return (
@@ -29,17 +30,17 @@ const CartScreen = () => {
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
         </Text>
-        <Button title='Order Now' onPress={() => {}} color={Colors.accent} disabled={cartItems.length === 0} />
+        <Button title='Order Now' onPress={() => {dispatch(orderActions.adOrder(cartItems, cartTotalAmount))}} color={Colors.accent} disabled={cartItems.length === 0} />
       </View>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.productId}
+        keyExtractor={(item) => item.id}
         renderItem={(itemData) => (
           <CartItem
             title={itemData.item.productTitle}
             quantity={itemData.item.quantity}
             amount={itemData.item.sum}
-            onRemove={() => {dispatch(cartActions.removeFromCart(itemData.item.productId))}}
+            onRemove={() => {dispatch(cartActions.removeFromCart(itemData.item.id))}}
           />
         )}
       />
