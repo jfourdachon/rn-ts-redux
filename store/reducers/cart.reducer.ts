@@ -1,6 +1,5 @@
 import CartItem from "../../models/cart-item"
-import Product from "../../models/product"
-import { AddToCartAction, ADD_TO_CART } from "../actions/cart.actions"
+import { ADD_TO_CART, CART_ACTIONS, REMOVE_FROM_CART } from "../actions/cart.actions"
 
 export type ItemCart = {
     // TODO Probably find a better way to bind CartItem type
@@ -20,11 +19,10 @@ const initialState = {
 
 }
 
-export default (state = initialState, { type, product }: AddToCartAction) => {
-    switch (type) {
+export default (state = initialState, action: CART_ACTIONS) => {
+    switch (action.type) {
         case ADD_TO_CART:
-
-            const addedProduct = product
+            const addedProduct = action.product
             const productPrice = addedProduct.price
             const productTitle = addedProduct.title
             let updatedOrNewCartItem
@@ -35,11 +33,11 @@ export default (state = initialState, { type, product }: AddToCartAction) => {
                     state.items[addedProduct.id].quantity + 1,
                     productPrice,
                     productTitle,
-                    state.items[addedProduct.id].sum + 1
+                    state.items[addedProduct.id].sum + productPrice
                 )
 
             } else {
-                updatedOrNewCartItem = new CartItem(1, productPrice, productTitle, 1)
+                updatedOrNewCartItem = new CartItem(1, productPrice, productTitle, productPrice)
 
             }
 
@@ -48,6 +46,22 @@ export default (state = initialState, { type, product }: AddToCartAction) => {
                 items: { ...state.items, [addedProduct.id]: updatedOrNewCartItem },
                 totalAmount: state.totalAmount + productPrice
             }
+        case REMOVE_FROM_CART:
+            const selectedItem = state.items[action.id]
+            const curretnQty = selectedItem.quantity
+            let updatedCartItems
+            if (curretnQty > 1) {
+                const updatedcartItem = new CartItem(selectedItem.quantity - 1, selectedItem.productPrice, selectedItem.productTitle, selectedItem.sum - selectedItem.productPrice)
+                updatedCartItems = {...state.items, [action.id]: updatedcartItem}
+
+            } else {
+                updatedCartItems = { ...state.items }
+                delete updatedCartItems[action.id]
+            }
+            return {...state, 
+            items: updatedCartItems,
+            totalAmount: state.totalAmount - selectedItem.productPrice
+        }
 
 
         default:
