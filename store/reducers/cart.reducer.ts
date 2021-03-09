@@ -29,8 +29,6 @@ export default (state = initialState, { type, product }: AddToCartAction) => {
             const productTitle = addedProduct.title
             let updatedOrNewCartItem
 
-            console.log(state)
-
             if (state.items[addedProduct.id]) {
                 // already have product in cart
                 updatedOrNewCartItem = new CartItem(
