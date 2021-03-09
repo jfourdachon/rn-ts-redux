@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, Button, ScrollView } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
 import { ROOT_STATE } from '../../store/combineReducers';
+import * as cartActions from '../../store/actions/cart.actions'
 
 const ProductDetailsScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const productId = navigation.getParam('productId');
@@ -11,11 +12,19 @@ const ProductDetailsScreen: NavigationStackScreenComponent = ({ navigation }) =>
     state.products.availableProducts.find((product) => product.id === productId)
   );
 
+  const dispatch = useDispatch()
+
+  const dispatchProduct = () => {
+      if (selectedProduct) {
+        dispatch(cartActions.addToCart(selectedProduct))
+      }
+  }
+
   return (
     <ScrollView>
       <Image source={{ uri: selectedProduct?.imageUrl }} style={styles.image} />
       <View style={styles.buttonContainer}>
-      <Button title='Add to Cart' onPress={() => {}} color={Colors.primary} />
+      <Button title='Add to Cart' onPress={() => {dispatchProduct}} color={Colors.primary} />
       </View>
       <Text style={styles.price}>${selectedProduct?.price.toFixed(2)}</Text>
       <Text style={styles.description}>{selectedProduct?.description}</Text>
