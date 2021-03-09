@@ -6,9 +6,10 @@ import Colors from '../../constants/Colors';
 import { ROOT_STATE } from '../../store/combineReducers';
 import * as cartActions from '../../store/actions/cart.actions';
 import * as orderActions from '../../store/actions/order.actions'
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 
 
-const CartScreen = () => {
+const CartScreen: NavigationStackScreenComponent = () => {
   const cartTotalAmount = useSelector((state: ROOT_STATE) => state.cart.totalAmount);
   const cartItems = useSelector((state: ROOT_STATE) => {
     const transformedCartItems = [];
@@ -47,6 +48,12 @@ const CartScreen = () => {
     </View>
   );
 };
+
+CartScreen.navigationOptions = () => {
+    return {
+        headerTitle: 'Your Cart'
+    }
+}
 
 export default CartScreen;
 

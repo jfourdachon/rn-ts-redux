@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { createStore } from 'redux';
 import { Provider, useStore } from 'react-redux';
 import rootReducer from './store/combineReducers';
-import ShopStackNavigator from './navigation/ShopStackNavigator';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import ShopDrawerNavigator from './navigation/ShopDrawerNavigator';
 
 // composeWithDevTools only for development !!!!!!!!!!!!!!!!!!
 // const store = createStore(rootReducer, composeWithDevTools());
@@ -32,7 +31,7 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <ShopStackNavigator />
+      <ShopDrawerNavigator />
     </Provider>
   );
 }
