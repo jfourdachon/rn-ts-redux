@@ -21,6 +21,6 @@ type AddOrder = {
 
 export type ORDER_ACTIONS = AddOrder
 
-export const adOrder = (cartItems: OrderItem[], totalAmount: number): AddOrder => {
+export const addOrder = (cartItems: OrderItem[], totalAmount: number): AddOrder => {
     return { type: ADD_ORDER, orderData: { items: cartItems, amount: totalAmount } }
 }

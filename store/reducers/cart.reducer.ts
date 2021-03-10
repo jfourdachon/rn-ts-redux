@@ -1,5 +1,6 @@
 import CartItem from "../../models/cart-item"
 import { ADD_TO_CART, CART_ACTIONS, REMOVE_FROM_CART } from "../actions/cart.actions"
+import { ADD_ORDER, ORDER_ACTIONS } from "../actions/order.actions"
 
 export type ItemCart = {
     // TODO Probably find a better way to bind CartItem type
@@ -19,7 +20,7 @@ const initialState = {
 
 }
 
-export default (state = initialState, action: CART_ACTIONS) => {
+export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS) => {
     switch (action.type) {
         case ADD_TO_CART:
             const addedProduct = action.product
@@ -63,7 +64,9 @@ export default (state = initialState, action: CART_ACTIONS) => {
             totalAmount: state.totalAmount - selectedItem.productPrice
         }
 
-
+        case ADD_ORDER:
+            return initialState
+            
         default:
             return state
     }

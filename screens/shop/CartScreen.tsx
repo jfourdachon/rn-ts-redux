@@ -31,7 +31,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
         </Text>
-        <Button title='Order Now' onPress={() => {dispatch(orderActions.adOrder(cartItems, cartTotalAmount))}} color={Colors.accent} disabled={cartItems.length === 0} />
+        <Button title='Order Now' onPress={() => {dispatch(orderActions.addOrder(cartItems, cartTotalAmount))}} color={Colors.accent} disabled={cartItems.length === 0} />
       </View>
       <FlatList
         data={cartItems}
