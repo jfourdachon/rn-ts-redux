@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import Colors from '../../constants/Colors';
 
 type IProps = {
-  date: Date;
+  date: string;
   amount: number;
   onPress: () => void;
 };
@@ -32,13 +32,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'white',
     margin: 20,
-    padding: 10
+    padding: 10,
+    alignItems: 'center'
   },
   summary: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      width: '100%'
+      width: '100%',
+      marginBottom: 15
   },
   totalAmount: {
       fontFamily: 'open-sans-bold',
@@ -49,4 +51,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888'
   },
+
 });
