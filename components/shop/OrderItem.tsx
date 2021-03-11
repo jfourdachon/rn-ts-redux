@@ -13,8 +13,6 @@ type IProps = {
 
 const OrderItem = ({ date, amount, order }: IProps) => {
   const [showDetails, setShowDetails] = useState(false);
-  console.log({ showDetails });
-  console.log({ order });
 
   return (
     <View style={styles.orderItem}>
