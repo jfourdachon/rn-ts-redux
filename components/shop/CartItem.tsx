@@ -8,9 +8,10 @@ type IProps = {
   quantity: number;
   amount: number;
   onRemove: () => void;
+  deletable: boolean
 };
 
-const CartItem = ({ title, quantity, amount, onRemove }: IProps) => {
+const CartItem = ({ title, quantity, amount, onRemove, deletable }: IProps) => {
   return (
     <View style={styles.cartItem}>
       <View style={styles.itemdata}>
@@ -18,9 +19,11 @@ const CartItem = ({ title, quantity, amount, onRemove }: IProps) => {
       </View>
       <View style={styles.itemdata}>
         <Text style={styles.text}>${amount.toFixed(2)}</Text>
+        {deletable  && 
         <Touchable useForeground onPress={onRemove} style={styles.deleteButton}>
           <Ionicons name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'} size={23} color="red" />
         </Touchable>
+        }
       </View>
     </View>
   );

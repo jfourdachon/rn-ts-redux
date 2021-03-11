@@ -13,7 +13,7 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
     <FlatList
       data={orders}
       keyExtractor={(item) => item.id}
-      renderItem={(itemData) => <OrderItem amount={itemData.item.totalAMount} date={itemData.item.readableDate} onPress={() => {}} />}
+      renderItem={(itemData) => <OrderItem amount={itemData.item.totalAMount} date={itemData.item.readableDate} order={itemData.item}/>}
     />
   );
 };

@@ -42,6 +42,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
             quantity={itemData.item.quantity}
             amount={itemData.item.sum}
             onRemove={() => {dispatch(cartActions.removeFromCart(itemData.item.id))}}
+            deletable
           />
         )}
       />
