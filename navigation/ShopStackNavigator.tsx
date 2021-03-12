@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Platform } from 'react-native';
-import { createStackNavigator, NavigationStackOptions } from 'react-navigation-stack';
+import { createStackNavigator } from 'react-navigation-stack';
 import Colors from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -9,9 +9,8 @@ import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
-import { NavigationDrawerOptions } from 'react-navigation-drawer';
-import { NavigationBottomTabOptions } from 'react-navigation-tabs';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
+import EditProductScreen from '../screens/user/EditProductScreen';
 
 const defaultNavigationOptions = {
   headerStyle: {
@@ -59,6 +58,7 @@ export const OrdersStackNavigator = createStackNavigator(
 export const AdminStackNavigator = createStackNavigator(
   {
     UserProducts: UserProductsScreen,
+    EditProduct: EditProductScreen
   },
   {
     navigationOptions: {

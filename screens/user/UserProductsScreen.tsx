@@ -9,9 +9,12 @@ import { ROOT_STATE } from '../../store/combineReducers';
 import * as productsActions from '../../store/actions/products.actions';
 import Colors from '../../constants/Colors';
 
-const UserProductsScreen: NavigationStackScreenComponent = () => {
+const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const userProducts = useSelector((state: ROOT_STATE) => state.products.userProducts);
   const dispatch = useDispatch();
+  const editProductHandler = (id: string) => {
+    navigation.navigate('EditProduct', { productId: id });
+  };
   return (
     <FlatList
       data={userProducts}
@@ -21,9 +24,17 @@ const UserProductsScreen: NavigationStackScreenComponent = () => {
           title={itemData.item.title}
           imageUrl={itemData.item.imageUrl}
           price={itemData.item.price}
-          onSelect={() => {}}
+          onSelect={() => {
+              editProductHandler(itemData.item.id);
+          }}
         >
-          <Button title='Edit' onPress={() => {}} color={Colors.primary} />
+          <Button
+            title='Edit'
+            onPress={() => {
+                editProductHandler(itemData.item.id);
+            }}
+            color={Colors.primary}
+          />
           <Button
             title='Delete'
             onPress={() => {
@@ -51,6 +62,17 @@ UserProductsScreen.navigationOptions = ({ navigation }) => {
         />
       </HeaderButtons>
     ),
+    headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Cart'
+          iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+          onPress={() => {
+            navigation.navigate('EditProduct');
+          }}
+        />
+      </HeaderButtons>
+    )
   };
 };
 

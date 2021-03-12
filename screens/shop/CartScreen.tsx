@@ -29,7 +29,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
-          Total: <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
+          Total: <Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2) as any * 100) / 100}</Text>
         </Text>
         <Button title='Order Now' onPress={() => {dispatch(orderActions.addOrder(cartItems, cartTotalAmount))}} color={Colors.accent} disabled={cartItems.length === 0} />
       </View>
