@@ -1,5 +1,6 @@
 import Product from '../../models/product'
 import PRODUCTS from '../../data/dummy-data'
+import { DELETE_PRODUCT, PRODUCT_ACTIONS } from '../actions/products.actions'
 
 export type PRODUCT_STATE = {
     availableProducts: Product[],
@@ -8,16 +9,16 @@ export type PRODUCT_STATE = {
 
 const initialState = {
     availableProducts: PRODUCTS,
-    userProducts: PRODUCTS.filter((product:Product) => product.ownerId === 'u1')
+    userProducts: PRODUCTS.filter((product: Product) => product.ownerId === 'u1')
 }
 
-export default (state = initialState, { type, payload }: any) => {
-    switch (type) {
+export default (state = initialState, action: PRODUCT_ACTIONS) => {
+    switch (action.type) {
 
-    case 'typeName':
-        return { ...state, ...payload }
+        case DELETE_PRODUCT:
+            return { ...state, userProducts: state.userProducts.filter(product => product.id !== action.id), availableProducts: state.availableProducts.filter(product => product.id !== action.id) }
 
-    default:
-        return state
+        default:
+            return state
     }
 }

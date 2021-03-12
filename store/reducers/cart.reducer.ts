@@ -1,6 +1,7 @@
 import CartItem from "../../models/cart-item"
 import { ADD_TO_CART, CART_ACTIONS, REMOVE_FROM_CART } from "../actions/cart.actions"
 import { ADD_ORDER, ORDER_ACTIONS } from "../actions/order.actions"
+import { DELETE_PRODUCT, PRODUCT_ACTIONS } from "../actions/products.actions"
 
 export type ItemCart = {
     // TODO Probably find a better way to bind CartItem type
@@ -20,7 +21,7 @@ const initialState = {
 
 }
 
-export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS) => {
+export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS | PRODUCT_ACTIONS) => {
     switch (action.type) {
         case ADD_TO_CART:
             const addedProduct = action.product
@@ -53,20 +54,32 @@ export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS) => {
             let updatedCartItems
             if (curretnQty > 1) {
                 const updatedcartItem = new CartItem(selectedItem.quantity - 1, selectedItem.productPrice, selectedItem.productTitle, selectedItem.sum - selectedItem.productPrice)
-                updatedCartItems = {...state.items, [action.id]: updatedcartItem}
+                updatedCartItems = { ...state.items, [action.id]: updatedcartItem }
 
             } else {
                 updatedCartItems = { ...state.items }
                 delete updatedCartItems[action.id]
             }
-            return {...state, 
-            items: updatedCartItems,
-            totalAmount: state.totalAmount - selectedItem.productPrice
-        }
+            return {
+                ...state,
+                items: updatedCartItems,
+                totalAmount: state.totalAmount - selectedItem.productPrice
+            }
 
         case ADD_ORDER:
             return initialState
-            
+
+        case DELETE_PRODUCT:
+            if (!state.items[action.id]) {
+                return state
+            } else {
+
+                const updatedItems = { ...state.items }
+                const itemTotal = state.items[action.id].sum
+                delete updatedItems[action.id]
+                return { ...state, items: updatedItems, totalAmount: state.totalAmount - itemTotal }
+            }
+
         default:
             return state
     }
