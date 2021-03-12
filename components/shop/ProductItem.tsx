@@ -1,20 +1,19 @@
 import React from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
-import Colors from '../../constants/Colors';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Touchable from '../touchable/Touchable';
 
 type IProps = {
   title: string;
   price: number;
   imageUrl: string;
-  onViewDetail: () => void;
-  onAddToCart: () => void;
-};
+  onSelect: () => void;
+  children: React.ReactNode;
+}
 
-const ProductItem = ({ title, price, imageUrl, onViewDetail, onAddToCart }: IProps) => {
+const ProductItem = ({ title, price, imageUrl, onSelect, children }: IProps) => {
   return (
     <View style={styles.product}>
-      <Touchable onPress={onViewDetail} useForeground>
+      <Touchable onPress={onSelect} useForeground>
         <View>
           <Image style={styles.iamge} source={{ uri: imageUrl }} />
           <View style={styles.details}>
@@ -22,8 +21,7 @@ const ProductItem = ({ title, price, imageUrl, onViewDetail, onAddToCart }: IPro
             <Text style={styles.price}>${price.toFixed(2)}</Text>
           </View>
           <View style={styles.buttonsContainer}>
-            <Button title='View Details' onPress={onViewDetail} color={Colors.primary} />
-            <Button title='To Cart' onPress={onAddToCart} color={Colors.primary} />
+           {children}
           </View>
         </View>
       </Touchable>
