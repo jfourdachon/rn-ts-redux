@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Touchable from '../touchable/Touchable';
+import Card from '../UI/Card';
 
 type IProps = {
   title: string;
@@ -12,7 +13,7 @@ type IProps = {
 
 const ProductItem = ({ title, price, imageUrl, onSelect, children }: IProps) => {
   return (
-    <View style={styles.product}>
+    <Card style={styles.product}>
       <Touchable onPress={onSelect} useForeground>
         <View>
           <Image style={styles.iamge} source={{ uri: imageUrl }} />
@@ -25,26 +26,19 @@ const ProductItem = ({ title, price, imageUrl, onSelect, children }: IProps) => 
           </View>
         </View>
       </Touchable>
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   product: {
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
     height: 300,
     margin: 20,
-    overflow: 'hidden',
   },
   iamge: {
     width: '100%',
     height: '60%',
+    borderRadius: 10,
   },
   details: {
     alignItems: 'center',

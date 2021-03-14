@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FlatList, Platform } from 'react-native';
+import { Alert, Button, FlatList, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,15 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const editProductHandler = (id: string) => {
     navigation.navigate('EditProduct', { productId: id });
   };
+
+  const deleteHandler = (id: string) => {
+    Alert.alert('Are you sure?', 'Do you really want to delete this item?', [{ text: 'No', style: 'default' }, {
+      text: 'Yes', style: 'destructive', onPress: () => {
+        dispatch(productsActions.deleteProduct(id));
+      }
+    }])
+  }
+
   return (
     <FlatList
       data={userProducts}
@@ -25,21 +34,19 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
           imageUrl={itemData.item.imageUrl}
           price={itemData.item.price}
           onSelect={() => {
-              editProductHandler(itemData.item.id);
+            editProductHandler(itemData.item.id);
           }}
         >
           <Button
             title='Edit'
             onPress={() => {
-                editProductHandler(itemData.item.id);
+              editProductHandler(itemData.item.id);
             }}
             color={Colors.primary}
           />
           <Button
             title='Delete'
-            onPress={() => {
-              dispatch(productsActions.deleteProduct(itemData.item.id));
-            }}
+            onPress={() => deleteHandler(itemData.item.id)}
             color={Colors.primary}
           />
         </ProductItem>
@@ -63,7 +70,7 @@ UserProductsScreen.navigationOptions = ({ navigation }) => {
       </HeaderButtons>
     ),
     headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
           title='Cart'
           iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}

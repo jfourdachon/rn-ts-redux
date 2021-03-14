@@ -14,7 +14,6 @@ import CustomHeaderButton from '../../components/UI/HeaderButton';
 import { createProduct, updateProduct } from '../../store/actions/products.actions';
 import { ROOT_STATE } from '../../store/combineReducers';
 
-type IProps = {};
 
 const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const prodId = navigation.getParam('productId');
@@ -36,6 +35,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
       } else {
           dispatch(createProduct(title, imageUrl, description, +price))
       }
+      navigation.goBack()
   },[dispatch, prodId, title, description, imageUrl, price])
 
   useEffect(() => {

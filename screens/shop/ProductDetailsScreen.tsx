@@ -24,7 +24,7 @@ const ProductDetailsScreen: NavigationStackScreenComponent = ({ navigation }) =>
     <ScrollView>
       <Image source={{ uri: selectedProduct?.imageUrl }} style={styles.image} />
       <View style={styles.buttonContainer}>
-      <Button title='Add to Cart' onPress={() => {dispatchProduct}} color={Colors.primary} />
+      <Button title='Add to Cart' onPress={dispatchProduct} color={Colors.primary} />
       </View>
       <Text style={styles.price}>${selectedProduct?.price.toFixed(2)}</Text>
       <Text style={styles.description}>{selectedProduct?.description}</Text>
