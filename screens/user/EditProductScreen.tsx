@@ -6,6 +6,7 @@ import {
   ScrollView,
   TextInput,
   Platform,
+  Alert,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { NavigationStackScreenComponent } from "react-navigation-stack";
@@ -31,10 +32,24 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [description, setDescription] = useState(
     editedProduct ? editedProduct.description : ""
   );
+  const [titleIsValid, setTitleIsValid] = useState(false);
 
   const dispatch = useDispatch();
 
+  const titleChangeHandler = (title: string) => {
+    if (title.trim().length === 0) {
+      setTitleIsValid(false);
+    } else {
+      setTitleIsValid(true);
+    }
+    setTitle(title);
+  };
+
   const submitHandler = useCallback(() => {
+    if (!titleIsValid) {
+      Alert.alert('Wrong inputs', 'Please check the errors on th form', [{text: 'Okay'}])
+      return
+    }
     if (editedProduct) {
       dispatch(updateProduct(prodId, title, imageUrl, description));
     } else {
@@ -55,7 +70,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChange={(e) => setTitle(e.nativeEvent.text)}
+            onChange={(e) => titleChangeHandler(e.nativeEvent.text)}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect={false}
@@ -63,6 +78,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
             onEndEditing={() => console.log("onEndEditing")}
             onSubmitEditing={() => console.log("onSubmitEditing")}
           />
+          {!titleIsValid && <Text>Please provide a valid title.</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
