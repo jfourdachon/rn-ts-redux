@@ -18,23 +18,9 @@ import {
 } from "../../store/actions/products.actions";
 import { ROOT_STATE } from "../../store/combineReducers";
 
-type InputValues = {
-  title: string;
-  descrition: string;
-  imageUrl: string;
-  price: string;
-};
-
-type InputValidities = {
-  title: boolean;
-  description: boolean;
-  imageUrl: boolean;
-  price: boolean;
-};
-
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
-const formReducer = (state, action) => {
+const formReducer = (state: any, action: any) => {
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
@@ -71,8 +57,8 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
       imageUrl: editedProduct ? true : false,
       description: editedProduct ? true : false,
       price: editedProduct ? true : false
-    }
-  }, formIsValid: false)
+    },formIsValid: false
+  })
 
   const textChangeHandler = (text: string, inputIdentifier: string) => {
     let isValid = false
