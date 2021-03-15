@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,45 +18,81 @@ import {
 } from "../../store/actions/products.actions";
 import { ROOT_STATE } from "../../store/combineReducers";
 
+type InputValues = {
+  title: string;
+  descrition: string;
+  imageUrl: string;
+  price: string;
+};
+
+type InputValidities = {
+  title: boolean;
+  description: boolean;
+  imageUrl: boolean;
+  price: boolean;
+};
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input] : action.input
+    }
+    const updatedValidities = {...state.inputValidities, [action.input]: action.isValid}
+    let updatedFormIsValid = true
+    for(const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key]
+    }
+    return { updatedFormIsValid, inputValues: updatedValues, inputValidities: updatedValidities}
+  }
+  return state
+}
+
 const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const prodId = navigation.getParam("productId");
   const editedProduct = useSelector((state: ROOT_STATE) =>
     state.products.userProducts.find((product) => product.id === prodId)
   );
 
-  const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
-  const [imageUrl, setImageUrl] = useState(
-    editedProduct ? editedProduct.imageUrl : ""
-  );
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState(
-    editedProduct ? editedProduct.description : ""
-  );
-  const [titleIsValid, setTitleIsValid] = useState(false);
 
   const dispatch = useDispatch();
 
-  const titleChangeHandler = (title: string) => {
-    if (title.trim().length === 0) {
-      setTitleIsValid(false);
-    } else {
-      setTitleIsValid(true);
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      title: editedProduct ? editedProduct.title : '',
+      imageUrl: editedProduct ? editedProduct.imageUrl : '',
+      description: editedProduct ? editedProduct.description : '',
+      price: ''
+    },
+    inputValidities: {
+      title: editedProduct ? true : false,
+      imageUrl: editedProduct ? true : false,
+      description: editedProduct ? true : false,
+      price: editedProduct ? true : false
     }
-    setTitle(title);
+  }, formIsValid: false)
+
+  const textChangeHandler = (text: string, inputIdentifier: string) => {
+    let isValid = false
+    if (formState.inputValues.title.trim().length > 0) {
+      isValid = true
+    } 
+    dispatchFormState({type: FORM_INPUT_UPDATE, value: text, isValid, input: inputIdentifier })
   };
 
   const submitHandler = useCallback(() => {
-    if (!titleIsValid) {
-      Alert.alert('Wrong inputs', 'Please check the errors on th form', [{text: 'Okay'}])
-      return
+    if (!formState.isValid) {
+      Alert.alert('Wrong input', 'Check the erros on the form', [{text: 'Okay'}])
     }
     if (editedProduct) {
-      dispatch(updateProduct(prodId, title, imageUrl, description));
+      dispatch(updateProduct(prodId, formState.inputValues.title, formState.inputValues.imageUrl, formState.inputValues.description));
     } else {
-      dispatch(createProduct(title, imageUrl, description, +price));
+      dispatch(createProduct(formState.inputValues.title, formState.inputValues.imageUrl, formState.inputValues.description, +formState.inputValues.price));
     }
     navigation.goBack();
-  }, [dispatch, prodId, title, description, imageUrl, price]);
+  }, [dispatch, prodId, formState]);
 
   useEffect(() => {
     navigation.setParams({ submit: submitHandler });
@@ -69,8 +105,8 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           <Text style={styles.label}>Title</Text>
           <TextInput
             style={styles.input}
-            value={title}
-            onChange={(e) => titleChangeHandler(e.nativeEvent.text)}
+            value={formState.inputValues.title}
+            onChange={(e) => textChangeHandler(e.nativeEvent.text, 'title')}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect={false}
@@ -78,14 +114,14 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
             onEndEditing={() => console.log("onEndEditing")}
             onSubmitEditing={() => console.log("onSubmitEditing")}
           />
-          {!titleIsValid && <Text>Please provide a valid title.</Text>}
+          {!formState.inputValidities.title && <Text>Please provide a valid title.</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
           <TextInput
             style={styles.input}
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.nativeEvent.text)}
+            value={formState.inputValues.imageUrl}
+            onChange={(e) => textChangeHandler(e.nativeEvent.text, 'imageUrl')}
           />
         </View>
         {editedProduct ? null : (
@@ -93,8 +129,8 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
             <Text style={styles.label}>Price</Text>
             <TextInput
               style={styles.input}
-              value={price}
-              onChange={(e) => setPrice(e.nativeEvent.text)}
+              value={formState.inputValues.price}
+              onChange={(e) => textChangeHandler(e.nativeEvent.text, 'price')}
               keyboardType="decimal-pad"
             />
           </View>
@@ -103,8 +139,8 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={styles.input}
-            value={description}
-            onChange={(e) => setDescription(e.nativeEvent.text)}
+            value={formState.inputValues.description}
+            onChange={(e) => textChangeHandler(e.nativeEvent.text, 'description')}
           />
         </View>
       </View>
@@ -151,3 +187,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
 });
+
