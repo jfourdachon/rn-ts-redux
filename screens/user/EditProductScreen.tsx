@@ -12,6 +12,12 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { NavigationStackScreenComponent } from "react-navigation-stack";
 import { useDispatch, useSelector } from "react-redux";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
+import Input from "../../components/UI/Input";
+import {
+  AutoCapitalize,
+  KeyboardType,
+  ReturnKeyType,
+} from "../../enums/keyboard";
 import {
   createProduct,
   updateProduct,
@@ -25,22 +31,22 @@ type FormState = {
     price: string;
     description: string;
   };
-  
+
   inputValidities: {
     title: boolean;
     imageUrl: boolean;
     price: boolean;
     description: boolean;
   };
-  formIsValid: boolean
+  formIsValid: boolean;
 };
 
 type ActionsReducer = {
-  type: typeof FORM_INPUT_UPDATE,
-  value: string,
-  formIsValid: boolean,
-  input: string,
-}
+  type: typeof FORM_INPUT_UPDATE;
+  value: string;
+  formIsValid: boolean;
+  input: string;
+};
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -106,12 +112,11 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   };
 
   const submitHandler = useCallback(() => {
-
     if (!formState.formIsValid) {
       Alert.alert("Wrong input", "Check the erros on the form", [
         { text: "Okay" },
       ]);
-      return
+      return;
     }
     if (editedProduct) {
       dispatch(
@@ -142,52 +147,40 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.title}
-            onChange={(e) => textChangeHandler(e.nativeEvent.text, "title")}
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect={false}
-            returnKeyType="next"
-            onEndEditing={() => console.log("onEndEditing")}
-            onSubmitEditing={() => console.log("onSubmitEditing")}
-          />
-          {!formState.inputValidities.title && (
-            <Text>Please provide a valid title.</Text>
-          )}
-        </View>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Image URL</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.imageUrl}
-            onChange={(e) => textChangeHandler(e.nativeEvent.text, "imageUrl")}
-          />
-        </View>
+        <Input
+          label="Title"
+          value={formState.inputValues.title}
+          keyboardType={KeyboardType.Default}
+          autoCapitalize={AutoCapitalize.Sentences}
+          autoCorrect={false}
+          returnKeyType={ReturnKeyType.Next}
+          textError="Please, provide a valid title"
+        />
+        <Input
+          label="Image Url"
+          value={formState.inputValues.imageUrl}
+          keyboardType={KeyboardType.Default}
+          returnKeyType={ReturnKeyType.Next}
+          textError="Please, provide a valid image url"
+        />
         {editedProduct ? null : (
-          <View style={styles.formControl}>
-            <Text style={styles.label}>Price</Text>
-            <TextInput
-              style={styles.input}
-              value={formState.inputValues.price}
-              onChange={(e) => textChangeHandler(e.nativeEvent.text, "price")}
-              keyboardType="decimal-pad"
-            />
-          </View>
-        )}
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.description}
-            onChange={(e) =>
-              textChangeHandler(e.nativeEvent.text, "description")
-            }
+          <Input
+            label="Price"
+            value={formState.inputValues.price}
+            keyboardType={KeyboardType.NumberPad}
+            returnKeyType={ReturnKeyType.Next}
+            textError="Please, provide a valid price"
           />
-        </View>
+        )}
+        <Input
+          label="Description"
+          value={formState.inputValues.description}
+          keyboardType={KeyboardType.Default}
+          autoCapitalize={AutoCapitalize.Sentences}
+          autoCorrect={true}
+          returnKeyType={ReturnKeyType.Next}
+          textError="Please, provide a valid description"
+        />
       </View>
     </ScrollView>
   );
@@ -217,18 +210,5 @@ export default EditProductScreen;
 const styles = StyleSheet.create({
   form: {
     margin: 20,
-  },
-  formControl: {
-    width: "100%",
-  },
-  label: {
-    fontFamily: "open-sans-bold",
-    marginVertical: 8,
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
   },
 });
