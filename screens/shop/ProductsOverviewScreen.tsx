@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, FlatList, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
@@ -8,6 +8,7 @@ import CustomHeaderButton from '../../components/UI/HeaderButton';
 import { ROOT_STATE } from '../../store/combineReducers';
 import * as cartActions from '../../store/actions/cart.actions';
 import Colors from '../../constants/Colors';
+import { fetchProducts } from '../../store/actions/products.actions';
 
 const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -20,6 +21,9 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) 
   };
 
   const products = useSelector((state: ROOT_STATE) => state.products.availableProducts);
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
   return (
     <FlatList
       data={products}

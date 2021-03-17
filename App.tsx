@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { createStore } from 'redux';
-import { Provider, useStore } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import rootReducer from './store/combineReducers';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ShopDrawerNavigator from './navigation/ShopDrawerNavigator';
+import ReduxThunk from 'redux-thunk'
 
 // composeWithDevTools only for development !!!!!!!!!!!!!!!!!!
 // const store = createStore(rootReducer, composeWithDevTools());
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const fetchFonts = () => {
   return Font.loadAsync({

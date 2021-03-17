@@ -1,7 +1,12 @@
 import Product from "../../../models/product"
-import { CREATE_PRODUCT, DELETE_PRODUCT, UPDATE_PRODUCT } from "../../../store/actions/products.actions"
+import { CREATE_PRODUCT, DELETE_PRODUCT, SET_PRODUCT, UPDATE_PRODUCT } from "../../../store/actions/products.actions"
 
 /* Actions */
+
+export type SetProducts = {
+    type: typeof SET_PRODUCT
+    products: Product[]
+}
 
 export type DeleteProduct = {
     type: typeof DELETE_PRODUCT
@@ -11,11 +16,13 @@ export type DeleteProduct = {
 export type CreateProduct = {
     type: typeof CREATE_PRODUCT
     productData: {
+        id: string
         title: string
         imageUrl: string
         description: string
         price: number
     }
+    dispatch: () => void
 }
 
 export type UpdateProduct = {
@@ -28,7 +35,7 @@ export type UpdateProduct = {
     }
 }
 
-export type PRODUCT_ACTIONS = DeleteProduct | CreateProduct | UpdateProduct
+export type PRODUCT_ACTIONS = DeleteProduct | CreateProduct | UpdateProduct | SetProducts
 
 /* Reducer */
 
