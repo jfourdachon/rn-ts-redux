@@ -3,6 +3,7 @@ import PRODUCTS from "../../data/dummy-data";
 import {
   CREATE_PRODUCT,
   DELETE_PRODUCT,
+  SET_PRODUCT,
   UPDATE_PRODUCT,
 } from "../actions/products.actions";
 import { PRODUCT_ACTIONS } from "../../typescript/types/redux/product";
@@ -19,6 +20,11 @@ const initialState: state = {
 
 export default (state = initialState, action: PRODUCT_ACTIONS) => {
   switch (action.type) {
+    case SET_PRODUCT: 
+        return {
+            availableProducts: action.products,
+            userProducts: action.products.filter((product: Product) => product.ownerId === "u1")
+        }
     case CREATE_PRODUCT:
       const newProduct = new Product(
         action.productData.id,
