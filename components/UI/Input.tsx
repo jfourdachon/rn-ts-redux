@@ -1,33 +1,74 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import { AutoCapitalize, KeyboardType, ReturnKeyType } from "../../enums/keyboard";
+import {
+  AutoCapitalize,
+  KeyboardType,
+  ReturnKeyType,
+} from "../../enums/keyboard";
 
 type IProps = {
   label: string;
   value: string;
+  inputId: string;
   keyboardType: KeyboardType;
   autoCapitalize?: AutoCapitalize;
   autoCorrect?: boolean;
   returnKeyType?: ReturnKeyType;
-  textError: string
-  initialValue?: string
-  isValid?: boolean
+  textError: string;
+  initialValue: string;
+  isValid: boolean;
+  required?: boolean;
+  email?: boolean;
+  min?: number;
+  max?: number;
+  minLength?: number;
+  onInputChange: (a: string, b: string, c: boolean) => void;
 };
 
-const INPUT_CHANGE = "INPUT_CHANGE"
+type InputState = {
+  value: string;
+  isValid: boolean;
+  touched: boolean;
+};
 
-const inputReducer = (state: any, action: any) => {
-    switch (action.type) {
-        case INPUT_CHANGE:
-            
-            break;
-    
-        default:
-            return state;
-    }
+type InputChangeAction = {
+  type: typeof INPUT_CHANGE;
+  value: string;
+  isValid: boolean;
+};
+
+type InputBlurAction = {
+  type: typeof INPUT_BLUR
 }
 
+const INPUT_CHANGE = "INPUT_CHANGE";
+const INPUT_BLUR = "INPUT_BLUR";
+
+const inputReducer = (state: InputState, action: InputChangeAction | InputBlurAction) => {
+  switch (action.type) {
+    case INPUT_CHANGE:
+      return {
+        ...state,
+        value: action.value,
+        isValid: action.isValid,
+      };
+    case INPUT_BLUR:
+      return {
+        ...state,
+        touched: true,
+      };
+    default:
+      return state;
+  }
+};
+
 const Input = (props: IProps) => {
+  const [inputState, dispatch] = useReducer(inputReducer, {
+    value: props.initialValue ? props.initialValue : "",
+    isValid: props.isValid,
+    touched: false,
+  });
+
   const textChangeHandler = (text: string) => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let isValid = true;
@@ -46,26 +87,30 @@ const Input = (props: IProps) => {
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
     }
-      dispatch({type: INPUT_CHANGE, value: text, isValid })
+    dispatch({ type: INPUT_CHANGE, value: text, isValid });
   };
 
-  const [inputState, dispatch] = useReducer(inputReducer, {
-      value: props.initialValue ? props.initialValue : '',
-      isValid: props.isValid,
-      touched: false
-  })
+  const lostFocusHandler = () => {
+    dispatch({ type: INPUT_BLUR });
+  };
+
+  const { onInputChange, inputId } = props;
+  useEffect(() => {
+    if (inputState.touched) {
+      onInputChange(inputState.value, inputId, inputState.isValid);
+    }
+  }, [inputState, onInputChange, inputId]);
   return (
     <View style={styles.formControl}>
       <Text style={styles.label}>{props.label}</Text>
       <TextInput
         {...props}
         style={styles.input}
-        value={props.value}
+        value={inputState.value}
         onChange={(e) => textChangeHandler(e.nativeEvent.text)}
+        onBlur={lostFocusHandler}
       />
-      {/* {!formState.inputValidities.title && (
-          <Text>{props.textError}</Text>
-        )} */}
+      {!inputState.isValid && inputState.touched && <View style={styles.errorContainer}><Text style={styles.errorText}>{props.textError}</Text></View>}
     </View>
   );
 };
@@ -86,4 +131,12 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
   },
+  errorContainer: {
+    marginVertical: 5
+  },
+  errorText: {
+    fontFamily: 'open-sans',
+    fontSize: 13,
+    color: 'red'
+  }
 });
