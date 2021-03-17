@@ -1,35 +1,8 @@
-import Product from "../../models/product"
+import {CreateProduct, UpdateProduct, DeleteProduct} from '../../typescript/types/redux/product'
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT'
 export const CREATE_PRODUCT = 'CREATE_PRODUCT'
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
-
-
-type DeleteProduct = {
-    type: typeof DELETE_PRODUCT
-    id: string
-}
-
-type CreateProduct = {
-    type: typeof CREATE_PRODUCT
-    productData: {
-        title: string
-        imageUrl: string
-        description: string
-        price: number
-    }
-}
-
-
-type UpdateProduct = {
-    type: typeof UPDATE_PRODUCT
-    id: string
-    productData: {
-        title: string
-        imageUrl: string
-        description: string
-    }
-}
 
 
 export const deleteProduct = (productId: string): DeleteProduct => {
@@ -43,5 +16,3 @@ export const createProduct = (title: string, imageUrl: string, description: stri
 export const updateProduct = (id: string, title: string, imageUrl: string, description: string): UpdateProduct => {
     return { type: UPDATE_PRODUCT, id, productData: { title, imageUrl, description } }
 }
-
-export type PRODUCT_ACTIONS = DeleteProduct | CreateProduct | UpdateProduct

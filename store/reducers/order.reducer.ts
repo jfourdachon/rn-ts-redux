@@ -1,9 +1,7 @@
 import Order from "../../models/order"
-import { ADD_ORDER, ORDER_ACTIONS } from "../actions/order.actions"
+import { ORDER_ACTIONS, ORDER_STATE } from "../../typescript/types/redux/order"
+import { ADD_ORDER } from "../actions/order.actions"
 
-export type ORDER_STATE = {
-    orders: Order[]
-}
 
 const initialState: ORDER_STATE = {
     orders: []

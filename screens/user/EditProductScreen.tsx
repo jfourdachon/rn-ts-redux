@@ -16,39 +16,18 @@ import {
   AutoCapitalize,
   KeyboardType,
   ReturnKeyType,
-} from "../../enums/keyboard";
+} from "../../typescript/enums/keyboard";
 import {
   createProduct,
   updateProduct,
 } from "../../store/actions/products.actions";
 import { ROOT_STATE } from "../../store/combineReducers";
+import Product from "../../models/product";
+import { ActionsReducer, FormState } from "../../typescript/types/screens/editProduct";
 
-type FormState = {
-  inputValues: {
-    title: string;
-    imageUrl: string;
-    price: string;
-    description: string;
-  };
+export const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
-  inputValidities: {
-    title: boolean;
-    imageUrl: boolean;
-    price: boolean;
-    description: boolean;
-  };
-  formIsValid: boolean;
-};
-
-type ActionsReducer = {
-  type: typeof FORM_INPUT_UPDATE;
-  value: string;
-  formIsValid: boolean;
-  input: string;
-};
-
-const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
-
+// Input reducer
 const formReducer = (state: FormState, action: ActionsReducer) => {
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
@@ -76,11 +55,12 @@ const formReducer = (state: FormState, action: ActionsReducer) => {
 const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const prodId = navigation.getParam("productId");
   const editedProduct = useSelector((state: ROOT_STATE) =>
-    state.products.userProducts.find((product) => product.id === prodId)
+    state.products.userProducts.find((product: Product) => product.id === prodId)
   );
 
   const dispatch = useDispatch();
 
+  // prefer userReducer for handling several states
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
