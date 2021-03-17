@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   ScrollView,
-  TextInput,
   Platform,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { NavigationStackScreenComponent } from "react-navigation-stack";
@@ -141,6 +140,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, [submitHandler]);
 
   return (
+    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={100}>
     <ScrollView>
       <View style={styles.form}>
         <Input
@@ -201,6 +201,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
         />
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -226,6 +227,9 @@ EditProductScreen.navigationOptions = ({ navigation }) => {
 export default EditProductScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   form: {
     margin: 20,
   },
