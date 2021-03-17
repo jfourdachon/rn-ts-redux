@@ -98,18 +98,14 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
     formIsValid: false,
   });
 
-  const textChangeHandler = (text: string, inputIdentifier: string) => {
-    let isValid = false;
-    if (text.trim().length > 0) {
-      isValid = true;
-    }
+  const inputChangeHandler = useCallback((inputValue: string, inputIdentifier: string, inputValidity: boolean) => {
     dispatchFormState({
       type: FORM_INPUT_UPDATE,
-      value: text,
-      formIsValid: isValid,
+      value: inputValue,
+      formIsValid: inputValidity,
       input: inputIdentifier,
     });
-  };
+  }, [dispatchFormState]);
 
   const submitHandler = useCallback(() => {
     if (!formState.formIsValid) {
@@ -148,6 +144,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
     <ScrollView>
       <View style={styles.form}>
         <Input
+        inputId="title"
           label="Title"
           value={formState.inputValues.title}
           keyboardType={KeyboardType.Default}
@@ -155,24 +152,40 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           autoCorrect={false}
           returnKeyType={ReturnKeyType.Next}
           textError="Please, provide a valid title"
+          onInputChange={inputChangeHandler}
+          initialValue={editedProduct ? editedProduct.title : ''}
+          isValid={!!editedProduct}
+          required
         />
         <Input
+          inputId="imageUrl"
           label="Image Url"
           value={formState.inputValues.imageUrl}
           keyboardType={KeyboardType.Default}
           returnKeyType={ReturnKeyType.Next}
           textError="Please, provide a valid image url"
+          onInputChange={inputChangeHandler}
+          initialValue={editedProduct ? editedProduct.imageUrl : ''}
+          isValid={!!editedProduct}
+          required
         />
         {editedProduct ? null : (
           <Input
+            inputId="price"
             label="Price"
             value={formState.inputValues.price}
             keyboardType={KeyboardType.NumberPad}
             returnKeyType={ReturnKeyType.Next}
             textError="Please, provide a valid price"
+            onInputChange={inputChangeHandler}
+            initialValue={''}
+            isValid={!!editedProduct}
+            required
+            min={0.1}
           />
         )}
         <Input
+        inputId="description"
           label="Description"
           value={formState.inputValues.description}
           keyboardType={KeyboardType.Default}
@@ -180,6 +193,11 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           autoCorrect={true}
           returnKeyType={ReturnKeyType.Next}
           textError="Please, provide a valid description"
+          onInputChange={inputChangeHandler}
+          initialValue={editedProduct ? editedProduct.description : ''}
+          isValid={!!editedProduct}
+          required
+          minLength={5}
         />
       </View>
     </ScrollView>
