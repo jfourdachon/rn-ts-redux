@@ -1,7 +1,7 @@
 import React from 'react';
-import { FlatList, Platform, Text } from 'react-native';
+import { FlatList, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { HeaderTitle, NavigationStackScreenComponent } from 'react-navigation-stack';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useSelector } from 'react-redux';
 import OrderItem from '../../components/shop/OrderItem';
 import CustomHeaderButton from '../../components/UI/HeaderButton';

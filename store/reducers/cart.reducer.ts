@@ -1,24 +1,15 @@
 import CartItem from "../../models/cart-item"
-import { ADD_TO_CART, CART_ACTIONS, REMOVE_FROM_CART } from "../actions/cart.actions"
-import { ADD_ORDER, ORDER_ACTIONS } from "../actions/order.actions"
-import { DELETE_PRODUCT, PRODUCT_ACTIONS } from "../actions/products.actions"
-
-export type ItemCart = {
-    // TODO Probably find a better way to bind CartItem type
-    [id: string]: { productPrice: number, quantity: number, productTitle: string, sum: number };
-}
-
-
-export type CART_ITEMS_STATE = {
-    items: ItemCart;
-    totalAmount: number;
-}
+import { CART_ACTIONS, ItemCart } from "../../typescript/types/redux/cart"
+import { ORDER_ACTIONS } from "../../typescript/types/redux/order"
+import { PRODUCT_ACTIONS } from "../../typescript/types/redux/product"
+import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart.actions"
+import { ADD_ORDER } from "../actions/order.actions"
+import { DELETE_PRODUCT } from "../actions/products.actions"
 
 
 const initialState = {
     items: <ItemCart>{},
     totalAmount: 0
-
 }
 
 export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS | PRODUCT_ACTIONS) => {
@@ -79,7 +70,6 @@ export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS | PRO
                 delete updatedItems[action.id]
                 return { ...state, items: updatedItems, totalAmount: state.totalAmount - itemTotal }
             }
-
         default:
             return state
     }

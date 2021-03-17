@@ -1,13 +1,14 @@
 import Product from '../../models/product'
 import PRODUCTS from '../../data/dummy-data'
-import { CREATE_PRODUCT, DELETE_PRODUCT, PRODUCT_ACTIONS, UPDATE_PRODUCT } from '../actions/products.actions'
+import { CREATE_PRODUCT, DELETE_PRODUCT, UPDATE_PRODUCT } from '../actions/products.actions'
+import { PRODUCT_ACTIONS } from '../../typescript/types/redux/product'
 
-export type PRODUCT_STATE = {
-    availableProducts: Product[],
-    userProducts: Product[],
+type state = {
+    availableProducts: Product[]
+    userProducts: Product[]
 }
 
-const initialState = {
+const initialState: state = {
     availableProducts: PRODUCTS,
     userProducts: PRODUCTS.filter((product: Product) => product.ownerId === 'u1')
 }
