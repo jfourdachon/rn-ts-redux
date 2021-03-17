@@ -11,11 +11,13 @@ export type DeleteProduct = {
 export type CreateProduct = {
     type: typeof CREATE_PRODUCT
     productData: {
+        id: string
         title: string
         imageUrl: string
         description: string
         price: number
     }
+    dispatch: () => void
 }
 
 export type UpdateProduct = {
