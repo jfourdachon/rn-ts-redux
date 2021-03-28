@@ -49,14 +49,16 @@ export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown,
 
 export const deleteProduct = (productId: string): ThunkAction<Promise<void>, ROOT_STATE, unknown, DeleteProduct>  => {
   return async (dispatch) => {
-    await fetch(
+    const response = await fetch(
       `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${productId}.json`,
       {
         method: "DELETE",
       }
     );
+    if(!response.ok) {
+      throw Error('something went wrong')
+    }
     dispatch ({ type: DELETE_PRODUCT, id: productId });
-
   }
 };
 
@@ -105,7 +107,7 @@ export const updateProduct = (
   description: string
 ): ThunkAction<Promise<void>, ROOT_STATE, unknown, UpdateProduct>  => {
   return async (dispatch) => {
-    await fetch(
+    const response = await fetch(
       `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${id}.json`,
       {
         method: "PATCH",
@@ -119,6 +121,9 @@ export const updateProduct = (
         }),
       }
     );
+    if(!response.ok) {
+      throw Error('something went wrong')
+    }
     dispatch({
       type: UPDATE_PRODUCT,
       id,
