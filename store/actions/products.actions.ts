@@ -47,8 +47,17 @@ export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown,
   };
 };
 
-export const deleteProduct = (productId: string): DeleteProduct => {
-  return { type: DELETE_PRODUCT, id: productId };
+export const deleteProduct = (productId: string): ThunkAction<Promise<void>, ROOT_STATE, unknown, DeleteProduct>  => {
+  return async (dispatch) => {
+    await fetch(
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${productId}.json`,
+      {
+        method: "DELETE",
+      }
+    );
+    dispatch ({ type: DELETE_PRODUCT, id: productId });
+
+  }
 };
 
 export const createProduct = (
@@ -94,10 +103,26 @@ export const updateProduct = (
   title: string,
   imageUrl: string,
   description: string
-): UpdateProduct => {
-  return {
-    type: UPDATE_PRODUCT,
-    id,
-    productData: { title, imageUrl, description },
+): ThunkAction<Promise<void>, ROOT_STATE, unknown, UpdateProduct>  => {
+  return async (dispatch) => {
+    await fetch(
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${id}.json`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          imageUrl,
+          description,
+        }),
+      }
+    );
+    dispatch({
+      type: UPDATE_PRODUCT,
+      id,
+      productData: { title, imageUrl, description }
+    })
   };
 };
