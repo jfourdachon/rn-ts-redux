@@ -1,4 +1,4 @@
-import { OrderItem } from "../store/actions/order.actions"
+import { OrderItem } from "../typescript/types/redux/order";
 import moment from 'moment'
 import 'moment/locale/fr' 
 

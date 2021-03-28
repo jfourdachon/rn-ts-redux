@@ -1,10 +1,10 @@
 import Product from "../../../models/product"
-import { CREATE_PRODUCT, DELETE_PRODUCT, SET_PRODUCT, UPDATE_PRODUCT } from "../../../store/actions/products.actions"
+import { CREATE_PRODUCT, DELETE_PRODUCT, SET_PRODUCTS, UPDATE_PRODUCT } from "../../../store/actions/products.actions"
 
 /* Actions */
 
 export type SetProducts = {
-    type: typeof SET_PRODUCT
+    type: typeof SET_PRODUCTS
     products: Product[]
 }
 

@@ -1,20 +1,27 @@
-import Order from "../../models/order"
-import { ORDER_ACTIONS, ORDER_STATE } from "../../typescript/types/redux/order"
-import { ADD_ORDER } from "../actions/order.actions"
-
+import Order from "../../models/order";
+import { ORDER_ACTIONS, ORDER_STATE } from "../../typescript/types/redux/order";
+import { ADD_ORDER, SET_ORDERS } from "../actions/order.actions";
 
 const initialState: ORDER_STATE = {
-    orders: []
-}
+  orders: [],
+};
 
 export default (state = initialState, action: ORDER_ACTIONS) => {
-    switch (action.type) {
-
+  switch (action.type) {
+      case SET_ORDERS:
+           return {
+               orders: action.orders
+           }
     case ADD_ORDER:
-        const newOrder = new Order(new Date().toString(), action.orderData.items, action.orderData.amount, new Date())
-        return {...state, orders: state.orders.concat(newOrder)}
+      const newOrder = new Order(
+        action.orderData.id,
+        action.orderData.items,
+        action.orderData.amount,
+        action.orderData.date
+      );
+      return { ...state, orders: state.orders.concat(newOrder) };
 
     default:
-        return state
-    }
-}
+      return state;
+  }
+};

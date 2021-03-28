@@ -1,5 +1,5 @@
 import Order from "../../../models/order"
-import { ADD_ORDER } from "../../../store/actions/order.actions"
+import { ADD_ORDER, SET_ORDERS } from "../../../store/actions/order.actions"
 
 
 /* Actions */
@@ -14,13 +14,19 @@ export type OrderItem = {
 export type AddOrder = {
     type: typeof ADD_ORDER
     orderData: {
+        id: string
         items: OrderItem[]
         amount: number
-    }
-
+        date: Date
+    }    
 }
 
-export type ORDER_ACTIONS = AddOrder
+export type SetOrders = {
+    type: typeof SET_ORDERS
+    orders: Order[]
+}
+
+export type ORDER_ACTIONS = AddOrder | SetOrders
 
 /* Reducer */
 

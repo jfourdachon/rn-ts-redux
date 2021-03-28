@@ -4,7 +4,7 @@ import {
   AutoCapitalize,
   KeyboardType,
   ReturnKeyType,
-} from "../../enums/keyboard";
+} from "../../typescript/enums/keyboard";
 
 type IProps = {
   label: string;

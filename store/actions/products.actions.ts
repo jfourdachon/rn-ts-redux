@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import Product from "../../models/product";
 import {
@@ -11,22 +11,21 @@ import { ROOT_STATE } from "../combineReducers";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
-export const SET_PRODUCT = "SET_PRODUCT";
+export const SET_PRODUCTS = "SET_PRODUCTS";
 
-export const fetchProducts = (): ThunkAction<
-  void,
-  ROOT_STATE,
-  unknown,
-  Action<string>
-> => {
+export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown, AnyAction> => {
   return async (dispatch) => {
     // Here any async code
+    try {
     const response = await fetch(
       "https://rn-ts-redux-default-rtdb.firebaseio.com/products.json"
     );
 
+    if(!response.ok) {
+      throw new Error('Something went wrong.')
+    }
+
     const responseData = await response.json();
-    console.log({ responseData });
     const loadedProducts: Product[] = [];
     for (const key in responseData) {
       loadedProducts.push(
@@ -40,12 +39,26 @@ export const fetchProducts = (): ThunkAction<
         )
       );
     }
-    dispatch({type: SET_PRODUCT, products: loadedProducts})
+    await dispatch({type: SET_PRODUCTS, products: loadedProducts})
+  } catch (error) {
+      throw error
+  }
   };
 };
 
-export const deleteProduct = (productId: string): DeleteProduct => {
-  return { type: DELETE_PRODUCT, id: productId };
+export const deleteProduct = (productId: string): ThunkAction<Promise<void>, ROOT_STATE, unknown, DeleteProduct>  => {
+  return async (dispatch) => {
+    const response = await fetch(
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${productId}.json`,
+      {
+        method: "DELETE",
+      }
+    );
+    if(!response.ok) {
+      throw Error('something went wrong')
+    }
+    dispatch ({ type: DELETE_PRODUCT, id: productId });
+  }
 };
 
 export const createProduct = (
@@ -73,7 +86,6 @@ export const createProduct = (
     );
 
     const responseData = await response.json();
-    console.log({ responseData });
     dispatch({
       type: CREATE_PRODUCT,
       productData: {
@@ -92,10 +104,29 @@ export const updateProduct = (
   title: string,
   imageUrl: string,
   description: string
-): UpdateProduct => {
-  return {
-    type: UPDATE_PRODUCT,
-    id,
-    productData: { title, imageUrl, description },
+): ThunkAction<Promise<void>, ROOT_STATE, unknown, UpdateProduct>  => {
+  return async (dispatch) => {
+    const response = await fetch(
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${id}.json`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          imageUrl,
+          description,
+        }),
+      }
+    );
+    if(!response.ok) {
+      throw Error('something went wrong')
+    }
+    dispatch({
+      type: UPDATE_PRODUCT,
+      id,
+      productData: { title, imageUrl, description }
+    })
   };
 };
