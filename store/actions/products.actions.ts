@@ -21,7 +21,12 @@ export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown,
       "https://rn-ts-redux-default-rtdb.firebaseio.com/products.json"
     );
 
+    if(!response.ok) {
+      throw new Error('Something went wrong.')
+    }
+
     const responseData = await response.json();
+    console.log({responseData})
     const loadedProducts: Product[] = [];
     for (const key in responseData) {
       loadedProducts.push(
@@ -37,7 +42,7 @@ export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown,
     }
     await dispatch({type: SET_PRODUCTS, products: loadedProducts})
   } catch (error) {
-      
+      throw error
   }
   };
 };

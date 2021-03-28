@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, Platform, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Button, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { fetchProducts } from '../../store/actions/products.actions';
 const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const selectItemHandler = (id: string, title: string) => {
     navigation.navigate('ProductDetail', {
@@ -21,20 +22,37 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) 
     });
   };
 
+  const loadProducts = useCallback(async () => {
+    setError('')
+    setIsLoading(true)
+    try {
+      await dispatch(fetchProducts())
+    } catch (error) {
+      setError(error.message)
+    }
+    setIsLoading(false)
+  },[dispatch, setError, setIsLoading])
+
   const products = useSelector((state: ROOT_STATE) => state.products.availableProducts);
   useEffect(() => {
-    const loadProducts = async () => {
-      setIsLoading(true)
-      await dispatch(fetchProducts())
-      setIsLoading(false)
-    }
     loadProducts()
-      
-  }, [dispatch])
+  }, [loadProducts])
 
+  if(error) {
+    return <View style={styles.centered}>
+    <Text>An error occured.</Text>
+    <Button title='Try again' onPress={loadProducts} color={Colors.primary} />
+  </View>
+  }
   if (isLoading) {
     return <View style={styles.centered}>
       <ActivityIndicator size='large' color={Colors.primary} />
+    </View>
+  }
+
+  if(!isLoading && products.length === 0) {
+    return <View style={styles.centered}>
+      <Text>No product found. Maybe start to add some.</Text>
     </View>
   }
   return (
