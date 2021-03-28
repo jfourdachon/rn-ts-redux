@@ -14,8 +14,10 @@ export type OrderItem = {
 export type AddOrder = {
     type: typeof ADD_ORDER
     orderData: {
+        id: string
         items: OrderItem[]
         amount: number
+        date: Date
     }
 
 }
