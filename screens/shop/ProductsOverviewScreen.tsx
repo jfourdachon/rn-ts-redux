@@ -38,6 +38,14 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) 
     loadProducts()
   }, [loadProducts])
 
+  useEffect(() => {
+    const willFocusSub = navigation.addListener('willFocus', loadProducts)
+
+    return () => {
+      willFocusSub.remove()
+    }
+  }, [loadProducts])
+
   if(error) {
     return <View style={styles.centered}>
     <Text>An error occured.</Text>
