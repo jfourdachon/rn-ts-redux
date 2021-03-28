@@ -26,7 +26,6 @@ export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown,
     }
 
     const responseData = await response.json();
-    console.log({responseData})
     const loadedProducts: Product[] = [];
     for (const key in responseData) {
       loadedProducts.push(
