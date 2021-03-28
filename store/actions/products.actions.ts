@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import Product from "../../models/product";
 import {
@@ -13,14 +13,10 @@ export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
-export const fetchProducts = (): ThunkAction<
-  void,
-  ROOT_STATE,
-  unknown,
-  Action<string>
-> => {
+export const fetchProducts = (): ThunkAction<Promise<void>, ROOT_STATE, unknown, AnyAction> => {
   return async (dispatch) => {
     // Here any async code
+    try {
     const response = await fetch(
       "https://rn-ts-redux-default-rtdb.firebaseio.com/products.json"
     );
@@ -39,7 +35,10 @@ export const fetchProducts = (): ThunkAction<
         )
       );
     }
-    dispatch({type: SET_PRODUCTS, products: loadedProducts})
+    await dispatch({type: SET_PRODUCTS, products: loadedProducts})
+  } catch (error) {
+      
+  }
   };
 };
 

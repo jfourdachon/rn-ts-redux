@@ -23,14 +23,18 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) 
 
   const products = useSelector((state: ROOT_STATE) => state.products.availableProducts);
   useEffect(() => {
+    const loadProducts = async () => {
       setIsLoading(true)
-      dispatch(fetchProducts())
+      await dispatch(fetchProducts())
       setIsLoading(false)
+    }
+    loadProducts()
+      
   }, [dispatch])
 
   if (isLoading) {
-    return <View>
-      <ActivityIndicator size='large' style={styles.centered} />
+    return <View style={styles.centered}>
+      <ActivityIndicator size='large' color={Colors.primary} />
     </View>
   }
   return (
