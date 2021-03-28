@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, FlatList, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Button, FlatList, Platform, StyleSheet, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { fetchProducts } from '../../store/actions/products.actions';
 
 const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false)
 
   const selectItemHandler = (id: string, title: string) => {
     navigation.navigate('ProductDetail', {
@@ -22,8 +23,16 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) 
 
   const products = useSelector((state: ROOT_STATE) => state.products.availableProducts);
   useEffect(() => {
-    dispatch(fetchProducts())
+      setIsLoading(true)
+      dispatch(fetchProducts())
+      setIsLoading(false)
   }, [dispatch])
+
+  if (isLoading) {
+    return <View>
+      <ActivityIndicator size='large' style={styles.centered} />
+    </View>
+  }
   return (
     <FlatList
       data={products}
@@ -84,5 +93,13 @@ ProductsOverviewScreen.navigationOptions = ({ navigation }) => {
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})
 
 export default ProductsOverviewScreen;

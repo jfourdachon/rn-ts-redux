@@ -11,7 +11,7 @@ import { ROOT_STATE } from "../combineReducers";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
-export const SET_PRODUCT = "SET_PRODUCT";
+export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = (): ThunkAction<
   void,
@@ -26,7 +26,6 @@ export const fetchProducts = (): ThunkAction<
     );
 
     const responseData = await response.json();
-    console.log({ responseData });
     const loadedProducts: Product[] = [];
     for (const key in responseData) {
       loadedProducts.push(
@@ -40,7 +39,7 @@ export const fetchProducts = (): ThunkAction<
         )
       );
     }
-    dispatch({type: SET_PRODUCT, products: loadedProducts})
+    dispatch({type: SET_PRODUCTS, products: loadedProducts})
   };
 };
 
@@ -73,7 +72,6 @@ export const createProduct = (
     );
 
     const responseData = await response.json();
-    console.log({ responseData });
     dispatch({
       type: CREATE_PRODUCT,
       productData: {
