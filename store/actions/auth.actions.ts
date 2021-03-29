@@ -29,10 +29,15 @@ export const signup = (
         }
       );
       if (!response.ok) {
-        throw new Error("something went wrong!");
+        const errRespData = await response.json()
+        let message = 'Something went wrong!'
+        const errorId = errRespData.error.message
+        if (errorId === 'EMAIL_EXISTS') {
+          message = 'This email exists already'
+        } 
+        throw new Error(message);
       }
       const resData = await response.json();
-      console.log({resData})
       dispatch({ type: SIGNUP, authData: { email, password } });
   };
 };
@@ -58,10 +63,18 @@ export const login = (
           }
         );
         if (!response.ok) {
-          throw new Error("something went wrong!");
+          const errRespData = await response.json()
+          let message = 'Something went wrong!'
+          const errorId = errRespData.error.message
+          if (errorId === 'EMAIL_NOT_FOUND') {
+            message = 'This email has not been found'
+          } 
+          if ( errorId === 'INVALID_PASSWORD') {
+            message = 'This password is invalid'
+          }
+          throw new Error(message);
         }
         const resData = await response.json();
-        console.log({resData})
         dispatch({ type: LOGIN, authData: { email, password } });
     };
   };

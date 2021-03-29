@@ -1,10 +1,12 @@
-import React, { useCallback, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
   Button,
   View,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { NavigationStackScreenComponent } from "react-navigation-stack";
 import Card from "../../components/UI/Card";
@@ -65,6 +67,8 @@ const formReducer = (state: FormState, action: ActionsReducer) => {
 const AuthScreen: NavigationStackScreenComponent = () => {
   const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // prefer userReducer for handling several states
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -79,17 +83,34 @@ const AuthScreen: NavigationStackScreenComponent = () => {
     formIsValid: false,
   });
 
-  const authHandler = () => {
+  const authHandler = async () => {
+    let action;
     if (isSignUp) {
-      dispatch(
-        signup(formState.inputValues.email, formState.inputValues.password)
+      action = signup(
+        formState.inputValues.email,
+        formState.inputValues.password
       );
     } else {
-      dispatch(
-        login(formState.inputValues.email, formState.inputValues.password)
+      action = login(
+        formState.inputValues.email,
+        formState.inputValues.password
       );
     }
+    setError("");
+    setisLoading(true);
+    try {
+      await dispatch(action);
+    } catch (error) {
+      setError(error.message);
+    }
+    setisLoading(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occured", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
 
   const inputChangeHandler = useCallback(
     (inputValue: string, inputIdentifier: string, inputValidity: boolean) => {
@@ -137,17 +158,21 @@ const AuthScreen: NavigationStackScreenComponent = () => {
               secureTextEntry
             />
             <View style={styles.buttonContainer}>
-              <Button
-                title={isSignUp ? "Sign Up" : "Login"}
-                color={Colors.primary}
-                onPress={authHandler}
-              />
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.primary} />
+              ) : (
+                <Button
+                  title={isSignUp ? "Sign Up" : "Login"}
+                  color={Colors.primary}
+                  onPress={authHandler}
+                />
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <Button
                 title={`Switch to ${isSignUp ? "Login" : "Sign Up"}`}
                 color={Colors.accent}
-                onPress={() => setIsSignUp(prevState => !prevState)}
+                onPress={() => setIsSignUp((prevState) => !prevState)}
               />
             </View>
           </ScrollView>
