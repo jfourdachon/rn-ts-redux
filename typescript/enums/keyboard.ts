@@ -1,6 +1,7 @@
 export enum AutoCapitalize {
   Sentences = "sentences",
   Words = "words",
+  None = "none"
 }
 
 export enum KeyboardType {
