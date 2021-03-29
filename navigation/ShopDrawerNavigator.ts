@@ -1,10 +1,9 @@
 import {createDrawerNavigator} from 'react-navigation-drawer'
-import { createAppContainer } from 'react-navigation'
 
 import Colors from '../constants/Colors'
 import {ProductsStackNavigator, OrdersStackNavigator, AdminStackNavigator} from './ShopStackNavigator'
 
-const ShopNavigator = createDrawerNavigator({
+export const ShopNavigator = createDrawerNavigator({
     Products: ProductsStackNavigator,
     Orders: OrdersStackNavigator,
     Admin: AdminStackNavigator
@@ -14,4 +13,3 @@ const ShopNavigator = createDrawerNavigator({
     }
 }) 
 
-export default createAppContainer(ShopNavigator)
