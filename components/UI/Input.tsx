@@ -23,6 +23,7 @@ type IProps = {
   max?: number;
   minLength?: number;
   onInputChange: (a: string, b: string, c: boolean) => void;
+  secureTextEntry?: boolean
 };
 
 type InputState = {
