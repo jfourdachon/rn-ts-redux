@@ -10,7 +10,7 @@ import { NavigationStackScreenComponent } from "react-navigation-stack";
 import Card from "../../components/UI/Card";
 import Input from "../../components/UI/Input";
 import Colors from "../../constants/Colors";
-import { KeyboardType } from "../../typescript/enums/keyboard";
+import { AutoCapitalize, KeyboardType } from "../../typescript/enums/keyboard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 import { signup } from "../../store/actions/auth.actions";
@@ -107,6 +107,7 @@ const AuthScreen: NavigationStackScreenComponent = () => {
               label="E-mail"
               initialValue=""
               value={formState.inputValues.email}
+              autoCapitalize={AutoCapitalize.None}
               isValid={false}
               email
               onInputChange={inputChangeHandler}
@@ -122,6 +123,7 @@ const AuthScreen: NavigationStackScreenComponent = () => {
               minLength={5}
               onInputChange={inputChangeHandler}
               keyboardType={KeyboardType.Default}
+              autoCapitalize={AutoCapitalize.None}
               textError="Please enter a valid password"
               secureTextEntry
             />
