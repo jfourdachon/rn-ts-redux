@@ -5,11 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
 import { ROOT_STATE } from '../../store/combineReducers';
 import * as cartActions from '../../store/actions/cart.actions'
+import Product from '../../models/product';
 
 const ProductDetailsScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const productId = navigation.getParam('productId');
   const selectedProduct = useSelector((state: ROOT_STATE) =>
-    state.products.availableProducts.find((product) => product.id === productId)
+    state.products.availableProducts.find((product: Product) => product.id === productId)
   );
 
   const dispatch = useDispatch()
