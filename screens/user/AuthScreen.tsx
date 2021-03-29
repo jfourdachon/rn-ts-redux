@@ -13,10 +13,9 @@ import Colors from "../../constants/Colors";
 import { AutoCapitalize, KeyboardType } from "../../typescript/enums/keyboard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
-import { signup } from "../../store/actions/auth.actions";
+import { login, signup } from "../../store/actions/auth.actions";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
-
 
 type FormState = {
   inputValues: {
@@ -29,7 +28,6 @@ type FormState = {
     password: boolean;
   };
   formIsValid: boolean;
-  
 };
 
 type ActionsReducer = {
@@ -38,7 +36,6 @@ type ActionsReducer = {
   formIsValid: boolean;
   input: string;
 };
-
 
 // Input reducer
 const formReducer = (state: FormState, action: ActionsReducer) => {
@@ -66,33 +63,45 @@ const formReducer = (state: FormState, action: ActionsReducer) => {
 };
 
 const AuthScreen: NavigationStackScreenComponent = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [isSignUp, setIsSignUp] = useState(false);
 
   // prefer userReducer for handling several states
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: "",
-      password: ""
+      password: "",
     },
     inputValidities: {
       email: false,
-      password: false
+      password: false,
     },
     formIsValid: false,
   });
 
-  const signupHandler = () => {
-    dispatch(signup(formState.inputValues.email, formState.inputValues.password))
-  }
+  const authHandler = () => {
+    if (isSignUp) {
+      dispatch(
+        signup(formState.inputValues.email, formState.inputValues.password)
+      );
+    } else {
+      dispatch(
+        login(formState.inputValues.email, formState.inputValues.password)
+      );
+    }
+  };
 
-  const inputChangeHandler = useCallback((inputValue: string, inputIdentifier: string, inputValidity: boolean) => {
-    dispatchFormState({
-      type: FORM_INPUT_UPDATE,
-      value: inputValue,
-      formIsValid: inputValidity,
-      input: inputIdentifier,
-    });
-  }, [dispatchFormState]);
+  const inputChangeHandler = useCallback(
+    (inputValue: string, inputIdentifier: string, inputValidity: boolean) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        formIsValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -128,13 +137,17 @@ const AuthScreen: NavigationStackScreenComponent = () => {
               secureTextEntry
             />
             <View style={styles.buttonContainer}>
-              <Button title="Login" color={Colors.primary} onPress={signupHandler} />
+              <Button
+                title={isSignUp ? "Sign Up" : "Login"}
+                color={Colors.primary}
+                onPress={authHandler}
+              />
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title="Switch to sign Up"
+                title={`Switch to ${isSignUp ? "Login" : "Sign Up"}`}
                 color={Colors.accent}
-                onPress={() => {}}
+                onPress={() => setIsSignUp(prevState => !prevState)}
               />
             </View>
           </ScrollView>
