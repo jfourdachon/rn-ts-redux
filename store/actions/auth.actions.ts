@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { ROOT_STATE } from "../combineReducers";
-import {API_KEY} from 'react-native-dotenv'
+import { REACT_NATIVE_API_KEY } from '@env'
 
 export const SIGNUP = "SIGNUP";
 export const LOGIN = 'LOGIN'
@@ -15,8 +15,9 @@ export const signup = (
   password: string
 ): ThunkAction<Promise<void>, ROOT_STATE, unknown, Auth> => {
   return async (dispatch) => {
+    console.log(REACT_NATIVE_API_KEY)
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${REACT_NATIVE_API_KEY}`,
         {
           method: "POST",
           headers: {
@@ -50,7 +51,7 @@ export const login = (
   ): ThunkAction<Promise<void>, ROOT_STATE, unknown, Auth> => {
     return async (dispatch) => {
         const response = await fetch(
-          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
+          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${REACT_NATIVE_API_KEY}`,
           {
             method: "POST",
             headers: {
