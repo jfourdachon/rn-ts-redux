@@ -64,7 +64,7 @@ const formReducer = (state: FormState, action: ActionsReducer) => {
   return state;
 };
 
-const AuthScreen: NavigationStackScreenComponent = () => {
+const AuthScreen: NavigationStackScreenComponent = ({navigation}) => {
   const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -100,10 +100,11 @@ const AuthScreen: NavigationStackScreenComponent = () => {
     setisLoading(true);
     try {
       await dispatch(action);
+      navigation.navigate('Shop')
     } catch (error) {
       setError(error.message);
+      setisLoading(false);
     }
-    setisLoading(false);
   };
 
   useEffect(() => {
