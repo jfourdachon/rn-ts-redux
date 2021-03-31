@@ -27,3 +27,4 @@ export type CART_ITEMS_STATE = {
     items: ItemCart;
     totalAmount: number;
 }
+
