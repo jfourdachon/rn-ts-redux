@@ -14,10 +14,11 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = (): ThunkAction<Promise<Product[]>, ROOT_STATE, unknown, AnyAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId
     // Here any async code
     async function onSuccess(products: Product[]) {
-      dispatch({type: SET_PRODUCTS, products: products})  
+      dispatch({type: SET_PRODUCTS, products: products, userProducts: products.filter(prod => prod.ownerId === userId)})  
       return products;
     }
     try {
@@ -74,6 +75,7 @@ export const createProduct = (
   return async (dispatch, getState) => {
     // Here any async code
     const token = getState().auth.token
+    const userId = getState().auth.userId
     const response = await fetch(
       `https://rn-ts-redux-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
@@ -86,6 +88,7 @@ export const createProduct = (
           imageUrl,
           price,
           description,
+          ownerId: userId
         }),
       }
     );
@@ -99,6 +102,7 @@ export const createProduct = (
         imageUrl,
         description,
         price,
+        ownerId: userId
       },
     });
   };

@@ -16,10 +16,11 @@ export const fetchOrders = (): ThunkAction<
   unknown,
   SetOrders
 > => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId
     try {
       const response = await fetch(
-        "https://rn-ts-redux-default-rtdb.firebaseio.com/orders/u1.json"
+        `https://rn-ts-redux-default-rtdb.firebaseio.com/orders/${userId}.json`
       );
 
       if (!response.ok) {
@@ -52,9 +53,10 @@ export const addOrder = (
   return async (dispatch, getState) => {
     // Here any async code
     const token = getState().auth.token
+    const userId = getState().auth.userId
     const date = new Date();
     const response = await fetch(
-      `https://rn-ts-redux-default-rtdb.firebaseio.com/orders/u1.json?auth=${token}`,
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/orders/${userId}.json?auth=${token}`,
       {
         method: "POST",
         headers: {

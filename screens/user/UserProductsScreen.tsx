@@ -1,27 +1,42 @@
-import React from 'react';
-import { Alert, Button, FlatList, Platform } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { NavigationStackScreenComponent } from 'react-navigation-stack';
-import { useDispatch, useSelector } from 'react-redux';
-import ProductItem from '../../components/shop/ProductItem';
-import CustomHeaderButton from '../../components/UI/HeaderButton';
-import { ROOT_STATE } from '../../store/combineReducers';
-import * as productsActions from '../../store/actions/products.actions';
-import Colors from '../../constants/Colors';
+import React from "react";
+import { Alert, Button, FlatList, Platform, StyleSheet, Text, View } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { NavigationStackScreenComponent } from "react-navigation-stack";
+import { useDispatch, useSelector } from "react-redux";
+import ProductItem from "../../components/shop/ProductItem";
+import CustomHeaderButton from "../../components/UI/HeaderButton";
+import { ROOT_STATE } from "../../store/combineReducers";
+import * as productsActions from "../../store/actions/products.actions";
+import Colors from "../../constants/Colors";
 
 const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
-  const userProducts = useSelector((state: ROOT_STATE) => state.products.userProducts);
+  const userProducts = useSelector(
+    (state: ROOT_STATE) => state.products.userProducts
+  );
   const dispatch = useDispatch();
   const editProductHandler = (id: string) => {
-    navigation.navigate('EditProduct', { productId: id });
+    navigation.navigate("EditProduct", { productId: id });
   };
 
   const deleteHandler = (id: string) => {
-    Alert.alert('Are you sure?', 'Do you really want to delete this item?', [{ text: 'No', style: 'default' }, {
-      text: 'Yes', style: 'destructive', onPress: () => {
-        dispatch(productsActions.deleteProduct(id));
-      }
-    }])
+    Alert.alert("Are you sure?", "Do you really want to delete this item?", [
+      { text: "No", style: "default" },
+      {
+        text: "Yes",
+        style: "destructive",
+        onPress: () => {
+          dispatch(productsActions.deleteProduct(id));
+        },
+      },
+    ]);
+  };
+
+  if (userProducts.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No product found. Maybe start to add some.</Text>
+      </View>
+    );
   }
 
   return (
@@ -38,14 +53,14 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
           }}
         >
           <Button
-            title='Edit'
+            title="Edit"
             onPress={() => {
               editProductHandler(itemData.item.id);
             }}
             color={Colors.primary}
           />
           <Button
-            title='Delete'
+            title="Delete"
             onPress={() => deleteHandler(itemData.item.id)}
             color={Colors.primary}
           />
@@ -57,12 +72,12 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
 UserProductsScreen.navigationOptions = ({ navigation }) => {
   return {
-    headerTitle: 'Your products',
+    headerTitle: "Your products",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
-          title='Cart'
-          iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+          title="Cart"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
           onPress={() => {
             navigation.toggleDrawer();
           }}
@@ -72,15 +87,23 @@ UserProductsScreen.navigationOptions = ({ navigation }) => {
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
-          title='Cart'
-          iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+          title="Cart"
+          iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
           onPress={() => {
-            navigation.navigate('EditProduct');
+            navigation.navigate("EditProduct");
           }}
         />
       </HeaderButtons>
-    )
+    ),
   };
 };
 
 export default UserProductsScreen;
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

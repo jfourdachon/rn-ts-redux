@@ -4,6 +4,7 @@ import {
   FlatList,
   Platform,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -28,6 +29,16 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
   useEffect(() => {
     loadOrders();
   }, [dispatch]);
+
+
+  if (orders.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No product found. Maybe start to add some.</Text>
+      </View>
+    );
+  }
+
   return isLoading ? (
     <View style={styles.centered}>
       <ActivityIndicator size="large" color={Colors.primary} />
