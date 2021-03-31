@@ -1,15 +1,21 @@
 import { ThunkAction } from "redux-thunk";
 import { ROOT_STATE } from "../combineReducers";
 import { REACT_NATIVE_API_KEY } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
+export const AUTHENTICATE = 'AUTENTICATE'
 
 export type AuthActions = {
-  type: typeof SIGNUP | typeof LOGIN;
+  type: typeof SIGNUP | typeof LOGIN | typeof AUTHENTICATE;
   token: string;
   userId: string;
 };
+
+export const authenticate = (userId: string, token: string): AuthActions => {
+  return { type: AUTHENTICATE, userId, token }
+}
 
 export const signup = (
   email: string,
@@ -40,7 +46,9 @@ export const signup = (
       throw new Error(message);
     }
     const resData = await response.json();
-    dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localId });
+    dispatch(authenticate(resData.localId,resData.idToken));
+    const expirationate = new Date(new Date().getTime() + +resData.expiresIn * 1000)
+    saveDataToStorage(resData.idToken, resData.localId, expirationate)
   };
 };
 
@@ -76,6 +84,13 @@ export const login = (
       throw new Error(message);
     }
     const resData = await response.json();
-    dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
+    dispatch(authenticate(resData.localId,resData.idToken));
+    const expirationate = new Date(new Date().getTime() + +resData.expiresIn * 1000)
+    saveDataToStorage(resData.idToken, resData.localId, expirationate)
   };
 };
+
+
+const saveDataToStorage = (token: string, userId: string, expirationsDate: Date) => {
+  AsyncStorage.setItem('userData', JSON.stringify({token, userId, expiryDate: expirationsDate.toISOString()}))
+}
