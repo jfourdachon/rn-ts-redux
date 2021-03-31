@@ -15,8 +15,6 @@ type IProps = {
 const OrderItem = ({ date, amount, order }: IProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
-  console.log({date})
-
   return (
     <Card style={styles.orderItem}>
       <View style={styles.summary}>

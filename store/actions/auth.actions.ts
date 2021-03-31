@@ -16,7 +16,6 @@ export const signup = (
   password: string
 ): ThunkAction<Promise<void>, ROOT_STATE, unknown, AuthActions> => {
   return async (dispatch) => {
-    console.log(REACT_NATIVE_API_KEY);
     const response = await fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${REACT_NATIVE_API_KEY}`,
       {

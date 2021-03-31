@@ -71,10 +71,11 @@ export const createProduct = (
   description: string,
   price: number
 ): ThunkAction<void, ROOT_STATE, unknown, Action<string>> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     // Here any async code
+    const token = getState().auth.token
     const response = await fetch(
-      "https://rn-ts-redux-default-rtdb.firebaseio.com/products.json",
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -109,9 +110,11 @@ export const updateProduct = (
   imageUrl: string,
   description: string
 ): ThunkAction<Promise<void>, ROOT_STATE, unknown, UpdateProduct>  => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    // Here any async code
+    const token = getState().auth.token
     const response = await fetch(
-      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${id}.json`,
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${id}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {

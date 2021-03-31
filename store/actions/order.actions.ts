@@ -49,10 +49,12 @@ export const addOrder = (
   cartItems: OrderItem[],
   totalAmount: number
 ): ThunkAction<Promise<void>, ROOT_STATE, unknown, AddOrder> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    // Here any async code
+    const token = getState().auth.token
     const date = new Date();
     const response = await fetch(
-      `https://rn-ts-redux-default-rtdb.firebaseio.com/orders/u1.json`,
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/orders/u1.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -69,6 +71,7 @@ export const addOrder = (
       throw new Error("Something went wrong!");
     }
     const respData = await response.json();
+    console.log(respData)
     dispatch({
       type: ADD_ORDER,
       orderData: {
