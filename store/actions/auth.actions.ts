@@ -3,12 +3,11 @@ import { ROOT_STATE } from "../combineReducers";
 import { REACT_NATIVE_API_KEY } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const SIGNUP = "SIGNUP";
-export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
 export const AUTHENTICATE = 'AUTENTICATE'
 
 export type AuthActions = {
-  type: typeof SIGNUP | typeof LOGIN | typeof AUTHENTICATE;
+  type: typeof LOGOUT | typeof AUTHENTICATE;
   token: string;
   userId: string;
 };
@@ -89,6 +88,10 @@ export const login = (
     saveDataToStorage(resData.idToken, resData.localId, expirationate)
   };
 };
+
+export const logout = () => {
+  return { type: LOGOUT }
+}
 
 
 const saveDataToStorage = (token: string, userId: string, expirationsDate: Date) => {
