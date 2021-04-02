@@ -16,7 +16,6 @@ export type AuthActions = {
 
 export const authenticate = (userId: string, token: string, expirytime: number): ThunkAction<void, ROOT_STATE, unknown, AuthActions> => {
   return (dispatch) => {
-    console.log(({expirytime}))
     dispatch(setLogoutTimer(expirytime))
     dispatch({ type: AUTHENTICATE, userId, token });
   }
@@ -96,7 +95,7 @@ export const login = (
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-    console.log(resData.expiresIn)
+
   };
 };
 
