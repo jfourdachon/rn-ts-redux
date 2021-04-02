@@ -4,9 +4,8 @@ import { Provider } from 'react-redux';
 import rootReducer from './store/combineReducers';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import MainNavigator from './navigation/MainNavigator';
 import ReduxThunk from 'redux-thunk'
+import NavigationContainer from './navigation/NavigationContainer';
 
 // composeWithDevTools only for development !!!!!!!!!!!!!!!!!!
 // const store = createStore(rootReducer, composeWithDevTools());
@@ -32,7 +31,7 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <MainNavigator />
+      <NavigationContainer />
     </Provider>
   );
 }

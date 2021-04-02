@@ -1,10 +1,12 @@
 import { ThunkAction } from "redux-thunk";
 import { ROOT_STATE } from "../combineReducers";
 import { REACT_NATIVE_API_KEY } from "@env";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const LOGOUT = "LOGOUT";
-export const AUTHENTICATE = 'AUTENTICATE'
+export const AUTHENTICATE = "AUTENTICATE";
+
+let timer:  ReturnType<typeof setTimeout>;
 
 export type AuthActions = {
   type: typeof LOGOUT | typeof AUTHENTICATE;
@@ -12,9 +14,13 @@ export type AuthActions = {
   userId: string;
 };
 
-export const authenticate = (userId: string, token: string): AuthActions => {
-  return { type: AUTHENTICATE, userId, token }
-}
+export const authenticate = (userId: string, token: string, expirytime: number): ThunkAction<void, ROOT_STATE, unknown, AuthActions> => {
+  return (dispatch) => {
+    console.log(({expirytime}))
+    dispatch(setLogoutTimer(expirytime))
+    dispatch({ type: AUTHENTICATE, userId, token });
+  }
+};
 
 export const signup = (
   email: string,
@@ -45,9 +51,11 @@ export const signup = (
       throw new Error(message);
     }
     const resData = await response.json();
-    dispatch(authenticate(resData.localId,resData.idToken));
-    const expirationate = new Date(new Date().getTime() + +resData.expiresIn * 1000)
-    saveDataToStorage(resData.idToken, resData.localId, expirationate)
+    dispatch(authenticate(resData.localId, resData.idToken, +resData.expiresIn * 1000));
+    const expirationDate = new Date(
+      new Date().getTime() + +resData.expiresIn * 1000
+    );
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
 };
 
@@ -83,17 +91,42 @@ export const login = (
       throw new Error(message);
     }
     const resData = await response.json();
-    dispatch(authenticate(resData.localId,resData.idToken));
-    const expirationate = new Date(new Date().getTime() + +resData.expiresIn * 1000)
-    saveDataToStorage(resData.idToken, resData.localId, expirationate)
+    dispatch(authenticate(resData.localId, resData.idToken, +resData.expiresIn * 1000));
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+    console.log(resData.expiresIn)
   };
 };
 
 export const logout = () => {
-  return { type: LOGOUT }
-}
+  AsyncStorage.removeItem("userData");
+  clearLogoutTimer()
+  return { type: LOGOUT };
+};
 
-
-const saveDataToStorage = (token: string, userId: string, expirationsDate: Date) => {
-  AsyncStorage.setItem('userData', JSON.stringify({token, userId, expiryDate: expirationsDate.toISOString()}))
+const saveDataToStorage = (
+  token: string,
+  userId: string,
+  expirationsDate: Date
+) => {
+  AsyncStorage.setItem(
+    "userData",
+    JSON.stringify({ token, userId, expiryDate: expirationsDate.toISOString() })
+  );
+};
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer)
+  }
 }
+const setLogoutTimer = (
+  expirationTime: number
+): ThunkAction<any, any, any, any> => {
+  return (dispatch) => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
+  };
+};
