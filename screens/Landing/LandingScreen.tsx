@@ -23,8 +23,9 @@ const LandingScreen: NavigationStackScreenComponent = ({navigation}) => {
                 navigation.navigate('Auth')
                 return
             }
+            const expirationTime = expirationDate.getTime() - new Date().getTime()
             navigation.navigate('Shop')
-            dispatch(authenticate(userId, token))
+            dispatch(authenticate(userId, token, expirationTime))
         }
         tryLogin()
     }, [dispatch])

@@ -34,8 +34,7 @@ export const ShopNavigator = createDrawerNavigator(
               title="Logout"
               onPress={() => {
                 dispatch(logout());
-                props.navigation.navigate('Auth')
-                AsyncStorage.removeItem('userData')
+                // props.navigation.navigate('Auth')
               }}
             />
           </SafeAreaView>
