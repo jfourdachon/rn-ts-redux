@@ -13,7 +13,7 @@ const NavigationContainer = () => {
         if(!isAuth) {
             navRef.current?.dispatch(NavigationActions.navigate({routeName: 'Auth'}))
         }
-    })
+    },[isAuth])
 
     return (
         <MainNavigator ref={navRef} />
