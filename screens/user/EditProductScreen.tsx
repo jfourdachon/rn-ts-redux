@@ -208,25 +208,6 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 };
 
-EditProductScreen.navigationOptions = ({ navigation }) => {
-  const submitFn = navigation.getParam("submit");
-  return {
-    headerTitle: navigation.getParam("productId")
-      ? "Edit Product"
-      : "Add Product",
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Save"
-          iconName={
-            Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
-          }
-          onPress={submitFn}
-        />
-      </HeaderButtons>
-    ),
-  };
-};
 export default EditProductScreen;
 
 const styles = StyleSheet.create({

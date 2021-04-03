@@ -70,33 +70,6 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 };
 
-UserProductsScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerTitle: "Your products",
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Cart"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}
-        />
-      </HeaderButtons>
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Cart"
-          iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
-          onPress={() => {
-            navigation.navigate("EditProduct");
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
-};
 
 export default UserProductsScreen;
 
