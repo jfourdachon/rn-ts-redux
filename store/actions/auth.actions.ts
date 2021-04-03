@@ -5,14 +5,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const LOGOUT = "LOGOUT";
 export const AUTHENTICATE = "AUTENTICATE";
+export const SET_DID_TRY_AUTO_LOGIN = "SET_DID_TRY_AUTO_LOGIN"
 
 let timer:  ReturnType<typeof setTimeout>;
 
 export type AuthActions = {
-  type: typeof LOGOUT | typeof AUTHENTICATE;
+  type: typeof LOGOUT | typeof AUTHENTICATE | typeof SET_DID_TRY_AUTO_LOGIN;
   token: string;
   userId: string;
+  didTryAutoLogin?: boolean
 };
+
+export const setDidTryAutoLogin = () => {
+    return { type: SET_DID_TRY_AUTO_LOGIN }
+}
 
 export const authenticate = (userId: string, token: string, expirytime: number): ThunkAction<void, ROOT_STATE, unknown, AuthActions> => {
   return (dispatch) => {

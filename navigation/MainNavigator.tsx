@@ -1,18 +1,36 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import React from 'react'
+import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from '../screens/Landing/LandingScreen';
 import AuthScreen from '../screens/user/AuthScreen';
-import {ShopNavigator} from './ShopDrawerNavigator'
 import { defaultNavigationOptions } from './ShopStackNavigator';
 
-const AuthStackNavigator = createStackNavigator({
-    Auth: AuthScreen
-}, {defaultNavigationOptions})
+const AuthStacknavigator = createStackNavigator();
 
-const MainNavigator = createSwitchNavigator({
-    Landing: LandingScreen,
-    Auth: AuthStackNavigator,
-    Shop: ShopNavigator
-})
+export const AuthNavigator = () => {
+  return (
+    <AuthStacknavigator.Navigator screenOptions={defaultNavigationOptions}>
+      <AuthStacknavigator.Screen
+        name='Auth'
+        component={AuthScreen}
+        options={{
+          headerTitle: 'Authenticate',
+        }}
+      />
+    </AuthStacknavigator.Navigator>
+  );
+};
 
-export default createAppContainer(MainNavigator)
+
+const LandingStacknavigator = createStackNavigator();
+
+export const LandingNavigator = () => {
+  return (
+    <LandingStacknavigator.Navigator screenOptions={defaultNavigationOptions}>
+      <LandingStacknavigator.Screen
+        name='Landing'
+        component={LandingScreen}
+      />
+    </LandingStacknavigator.Navigator>
+  );
+};
+

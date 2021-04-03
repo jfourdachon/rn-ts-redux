@@ -5,7 +5,7 @@ import rootReducer from './store/combineReducers';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import ReduxThunk from 'redux-thunk'
-import NavigationContainer from './navigation/NavigationContainer';
+import AppNavigator from './navigation/AppNavigator';
 
 // composeWithDevTools only for development !!!!!!!!!!!!!!!!!!
 // const store = createStore(rootReducer, composeWithDevTools());
@@ -31,7 +31,7 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <NavigationContainer />
+      <AppNavigator />
     </Provider>
   );
 }

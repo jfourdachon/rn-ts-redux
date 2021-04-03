@@ -58,23 +58,6 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
   );
 };
 
-OrdersScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerTitle: "Your Orders",
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Cart"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
-};
-
 const styles = StyleSheet.create({
   centered: {
     flex: 1,
