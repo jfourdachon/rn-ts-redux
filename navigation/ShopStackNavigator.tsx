@@ -54,7 +54,7 @@ export const ProductsNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                   onPress={() => {
-                    // props.navigation.toggleDrawer();
+                    props.navigation.toggleDrawer();
                   }}
                 />
               </HeaderButtons>
@@ -92,7 +92,7 @@ export const OrdersNavigator = () => {
       <OrderStackNavigator.Screen
         name='Orders'
         component={OrdersScreen}
-        options={({ navigation }) => {
+        options={(props) => {
           return {
             headerTitle: 'Your Orders',
             headerLeft: () => (
@@ -101,7 +101,7 @@ export const OrdersNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                   onPress={() => {
-                    // navigation.toggleDrawer();
+                    props.navigation.toggleDrawer();
                   }}
                 />
               </HeaderButtons>
@@ -121,7 +121,7 @@ export const AdminNavigator = () => {
       <AdminStackNavigator.Screen
         name='UserProducts'
         component={UserProductsScreen}
-        options={({ navigation }) => {
+        options={(props) => {
           return {
             headerTitle: 'Your products',
             headerLeft: () => (
@@ -130,7 +130,7 @@ export const AdminNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                   onPress={() => {
-                    // navigation.toggleDrawer();
+                    props.navigation.toggleDrawer();
                   }}
                 />
               </HeaderButtons>
@@ -141,7 +141,7 @@ export const AdminNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
                   onPress={() => {
-                    navigation.navigate('EditProduct');
+                    props.navigation.navigate('EditProduct');
                   }}
                 />
               </HeaderButtons>

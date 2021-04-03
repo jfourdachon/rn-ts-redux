@@ -39,10 +39,10 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) 
   }, [loadProducts]);
 
   useEffect(() => {
-    const willFocusSub = navigation.addListener('willFocus', loadProducts);
+    const unsuscribe = () => navigation.addListener('focus', loadProducts);
 
     return () => {
-      willFocusSub.remove();
+        unsuscribe();
     };
   }, [loadProducts]);
 

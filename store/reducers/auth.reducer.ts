@@ -17,7 +17,10 @@ export default (state: AUTH_STATE = initialState, action: AuthActions) => {
             didTryAutoLogin: true
         }
     case LOGOUT:
-          return initialState
+          return {
+              ...initialState,
+              didTryAutoLogin: true
+          }
     // case LOGIN:
     //   return { token: action.token, userId: action.userId };
     default:

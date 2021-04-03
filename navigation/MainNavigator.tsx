@@ -1,3 +1,4 @@
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from '../screens/Landing/LandingScreen';
 import AuthScreen from '../screens/user/AuthScreen';

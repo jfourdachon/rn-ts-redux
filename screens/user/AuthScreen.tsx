@@ -100,7 +100,7 @@ const AuthScreen: NavigationStackScreenComponent = ({navigation}) => {
     setisLoading(true);
     try {
       await dispatch(action);
-      navigation.navigate('Shop')
+    //   navigation.navigate('Shop')
     } catch (error) {
       setError(error.message);
       setisLoading(false);
@@ -125,11 +125,12 @@ const AuthScreen: NavigationStackScreenComponent = ({navigation}) => {
     [dispatchFormState]
   );
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={50}
-      style={styles.screen}
-    >
+    // <KeyboardAvoidingView
+    //   behavior="padding"
+    //   keyboardVerticalOffset={0}
+    //   style={styles.screen}
+    // >
+    <View  style={styles.screen}>
       <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
         <Card style={styles.AuthContainer}>
           <ScrollView>
@@ -179,7 +180,8 @@ const AuthScreen: NavigationStackScreenComponent = ({navigation}) => {
           </ScrollView>
         </Card>
       </LinearGradient>
-    </KeyboardAvoidingView>
+      </View>
+// </KeyboardAvoidingView>
   );
 };
 
