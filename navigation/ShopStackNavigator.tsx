@@ -34,7 +34,7 @@ export const ProductsNavigator = () => {
       <ProductsStackNavigator.Screen
         name='ProductsOverview'
         component={ProductsOverviewScreen}
-        options={({ navigation }) => {
+        options={(props) => {
           return {
             headerTitle: 'All Products',
             headerRight: () => (
@@ -43,7 +43,7 @@ export const ProductsNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
                   onPress={() => {
-                    navigation.navigate('Cart');
+                    props.navigation.navigate('Cart');
                   }}
                 />
               </HeaderButtons>
@@ -54,7 +54,7 @@ export const ProductsNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                   onPress={() => {
-                    navigation.toggleDrawer();
+                    // props.navigation.toggleDrawer();
                   }}
                 />
               </HeaderButtons>
@@ -101,7 +101,7 @@ export const OrdersNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                   onPress={() => {
-                    navigation.toggleDrawer();
+                    // navigation.toggleDrawer();
                   }}
                 />
               </HeaderButtons>
@@ -130,7 +130,7 @@ export const AdminNavigator = () => {
                   title='Cart'
                   iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                   onPress={() => {
-                    navigation.toggleDrawer();
+                    // navigation.toggleDrawer();
                   }}
                 />
               </HeaderButtons>

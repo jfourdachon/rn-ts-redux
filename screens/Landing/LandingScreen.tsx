@@ -4,7 +4,7 @@ import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { NavigationStackScreenComponent } from 'react-navigation-stack'
 import { useDispatch } from 'react-redux'
 import Colors from '../../constants/Colors'
-import { authenticate } from '../../store/actions/auth.actions'
+import { authenticate, setDidTryAutoLogin } from '../../store/actions/auth.actions'
 
 const LandingScreen: NavigationStackScreenComponent = ({navigation}) => {
     const dispatch = useDispatch()
@@ -12,7 +12,7 @@ const LandingScreen: NavigationStackScreenComponent = ({navigation}) => {
         const tryLogin = async() => {
             const userData = await AsyncStorage.getItem('userData')
             if(!userData) {
-                navigation.navigate('Auth')
+                dispatch(setDidTryAutoLogin())
                 return;
             }
             const transformedData = JSON.parse(userData)
@@ -20,11 +20,11 @@ const LandingScreen: NavigationStackScreenComponent = ({navigation}) => {
             const expirationDate = new Date(expiryDate)
 
             if(expirationDate <= new Date() || !token || !userId) {
-                navigation.navigate('Auth')
+                dispatch(setDidTryAutoLogin())
                 return
             }
             const expirationTime = expirationDate.getTime() - new Date().getTime()
-            navigation.navigate('Shop')
+            // navigation.navigate('Shop')
             dispatch(authenticate(userId, token, expirationTime))
         }
         tryLogin()

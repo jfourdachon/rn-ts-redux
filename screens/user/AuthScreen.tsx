@@ -183,12 +183,6 @@ const AuthScreen: NavigationStackScreenComponent = ({navigation}) => {
   );
 };
 
-AuthScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerTitle: "Authenticate",
-  };
-};
-
 export default AuthScreen;
 
 const styles = StyleSheet.create({

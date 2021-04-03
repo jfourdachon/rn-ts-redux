@@ -3,7 +3,7 @@ import { Button, Platform, View } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import { useDispatch } from 'react-redux';
 
 import Colors from '../constants/Colors';
@@ -13,9 +13,29 @@ import { Ionicons } from '@expo/vector-icons';
 
 const ShopDrawerNavigator = createDrawerNavigator();
 
-const ShopNavigator = () => {
+export const ShopNavigator = () => {
+  const dispatch = useDispatch();
+
   return (
-    <ShopDrawerNavigator.Navigator>
+    <ShopDrawerNavigator.Navigator
+      drawerContent={(props) => {
+        return (
+          <View style={{ flex: 1, paddingTop: 20 }}>
+            <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+              <DrawerItemList {...props} />
+              <Button
+                title='Logout'
+                onPress={() => {
+                  dispatch(logout());
+                  // props.navigation.navigate('Auth')
+                }}
+              />
+            </SafeAreaView>
+          </View>
+        );
+      }}
+      drawerContentOptions={{ activeTintColor: Colors.primary }}
+    >
       <ShopDrawerNavigator.Screen
         name='Products'
         component={ProductsNavigator}
@@ -51,6 +71,9 @@ const ShopNavigator = () => {
   );
 };
 
+/**
+ *  React navigation v4
+ */
 // export const ShopNavigator = createDrawerNavigator(
 //   {
 //     Products: ProductsStackNavigator,
