@@ -1,30 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { NavigationStackScreenComponent } from "react-navigation-stack";
-import { useDispatch, useSelector } from "react-redux";
-import ProductItem from "../../components/shop/ProductItem";
-import { ROOT_STATE } from "../../store/combineReducers";
-import * as cartActions from "../../store/actions/cart.actions";
-import Colors from "../../constants/Colors";
-import { fetchProducts } from "../../store/actions/products.actions";
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import { useDispatch, useSelector } from 'react-redux';
+import ProductItem from '../../components/shop/ProductItem';
+import { ROOT_STATE } from '../../store/combineReducers';
+import * as cartActions from '../../store/actions/cart.actions';
+import Colors from '../../constants/Colors';
+import { fetchProducts } from '../../store/actions/products.actions';
 
-const ProductsOverviewScreen: NavigationStackScreenComponent = ({
-  navigation,
-}) => {
+const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const selectItemHandler = (id: string, title: string) => {
-    navigation.navigate("ProductDetail", {
+    navigation.navigate('ProductDetail', {
       productId: id,
       productTitle: title,
     });
@@ -32,7 +23,7 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
 
   const loadProducts = useCallback(async () => {
     setIsRefreshing(true);
-    setError("");
+    setError('');
     try {
       await dispatch(fetchProducts());
     } catch (error) {
@@ -41,16 +32,14 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
     setIsRefreshing(false);
   }, [dispatch, setError, setIsLoading]);
 
-  const products = useSelector(
-    (state: ROOT_STATE) => state.products.availableProducts
-  );
+  const products = useSelector((state: ROOT_STATE) => state.products.availableProducts);
   useEffect(() => {
     setIsLoading(true);
     loadProducts().then(() => setIsLoading(false));
   }, [loadProducts]);
 
   useEffect(() => {
-    const willFocusSub = navigation.addListener("willFocus", loadProducts);
+    const willFocusSub = navigation.addListener('willFocus', loadProducts);
 
     return () => {
       willFocusSub.remove();
@@ -61,18 +50,14 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
     return (
       <View style={styles.centered}>
         <Text>An error occured.</Text>
-        <Button
-          title="Try again"
-          onPress={loadProducts}
-          color={Colors.primary}
-        />
+        <Button title='Try again' onPress={loadProducts} color={Colors.primary} />
       </View>
     );
   }
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size='large' color={Colors.primary} />
       </View>
     );
   }
@@ -100,14 +85,14 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
           }}
         >
           <Button
-            title="View Details"
+            title='View Details'
             onPress={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}
             color={Colors.primary}
           />
           <Button
-            title="To Cart"
+            title='To Cart'
             onPress={() => {
               dispatch(cartActions.addToCart(itemData.item));
             }}
@@ -119,12 +104,11 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
   );
 };
 
-
 const styles = StyleSheet.create({
   centered: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

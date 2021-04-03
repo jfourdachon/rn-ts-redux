@@ -1,29 +1,27 @@
-import React from "react";
-import { Alert, Button, FlatList, Platform, StyleSheet, Text, View } from "react-native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { NavigationStackScreenComponent } from "react-navigation-stack";
-import { useDispatch, useSelector } from "react-redux";
-import ProductItem from "../../components/shop/ProductItem";
-import CustomHeaderButton from "../../components/UI/HeaderButton";
-import { ROOT_STATE } from "../../store/combineReducers";
-import * as productsActions from "../../store/actions/products.actions";
-import Colors from "../../constants/Colors";
+import React from 'react';
+import { Alert, Button, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import { useDispatch, useSelector } from 'react-redux';
+import ProductItem from '../../components/shop/ProductItem';
+import CustomHeaderButton from '../../components/UI/HeaderButton';
+import { ROOT_STATE } from '../../store/combineReducers';
+import * as productsActions from '../../store/actions/products.actions';
+import Colors from '../../constants/Colors';
 
 const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
-  const userProducts = useSelector(
-    (state: ROOT_STATE) => state.products.userProducts
-  );
+  const userProducts = useSelector((state: ROOT_STATE) => state.products.userProducts);
   const dispatch = useDispatch();
   const editProductHandler = (id: string) => {
-    navigation.navigate("EditProduct", { productId: id });
+    navigation.navigate('EditProduct', { productId: id });
   };
 
   const deleteHandler = (id: string) => {
-    Alert.alert("Are you sure?", "Do you really want to delete this item?", [
-      { text: "No", style: "default" },
+    Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
+      { text: 'No', style: 'default' },
       {
-        text: "Yes",
-        style: "destructive",
+        text: 'Yes',
+        style: 'destructive',
         onPress: () => {
           dispatch(productsActions.deleteProduct(id));
         },
@@ -53,23 +51,18 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
           }}
         >
           <Button
-            title="Edit"
+            title='Edit'
             onPress={() => {
               editProductHandler(itemData.item.id);
             }}
             color={Colors.primary}
           />
-          <Button
-            title="Delete"
-            onPress={() => deleteHandler(itemData.item.id)}
-            color={Colors.primary}
-          />
+          <Button title='Delete' onPress={() => deleteHandler(itemData.item.id)} color={Colors.primary} />
         </ProductItem>
       )}
     />
   );
 };
-
 
 export default UserProductsScreen;
 
@@ -77,6 +70,6 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
+    alignItems: 'center',
+  },
+});
