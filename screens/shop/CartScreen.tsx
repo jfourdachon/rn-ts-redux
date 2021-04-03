@@ -79,12 +79,6 @@ const CartScreen: NavigationStackScreenComponent = () => {
   );
 };
 
-CartScreen.navigationOptions = () => {
-  return {
-    headerTitle: "Your Cart",
-  };
-};
-
 export default CartScreen;
 
 const styles = StyleSheet.create({

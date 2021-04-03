@@ -33,12 +33,6 @@ const ProductDetailsScreen: NavigationStackScreenComponent = ({ navigation }) =>
   );
 };
 
-ProductDetailsScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerTitle: navigation.getParam('productTitle'),
-  };
-};
-
 export default ProductDetailsScreen;
 
 const styles = StyleSheet.create({
