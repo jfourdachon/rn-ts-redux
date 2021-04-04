@@ -10,6 +10,7 @@ import Colors from '../constants/Colors';
 import { logout } from '../store/actions/auth.actions';
 import { ProductsNavigator, OrdersNavigator, AdminNavigator } from './ShopStackNavigator';
 import { Ionicons } from '@expo/vector-icons';
+import NotificationsScreen from '../screens/Notifications';
 
 const ShopDrawerNavigator = createDrawerNavigator();
 
@@ -64,6 +65,15 @@ export const ShopNavigator = () => {
         options={{
           drawerIcon: (props: any) => (
             <Ionicons name={Platform.OS === 'android' ? 'md-create' : 'ios-create'} size={23} color={props.color} />
+          ),
+        }}
+      />
+        <ShopDrawerNavigator.Screen
+        name='Notifications'
+        component={NotificationsScreen}
+        options={{
+          drawerIcon: (props: any) => (
+            <Ionicons name={Platform.OS === 'android' ? 'md-notifications' : 'ios-notifications'} size={23} color={props.color} />
           ),
         }}
       />
