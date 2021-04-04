@@ -3,17 +3,21 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 
-enum Permission {
-  Undetermined = 'undetermined',
-  Granted = 'granted',
-  Denied = 'denied',
-}
+Notifications.setNotificationHandler({
+    handleNotification: async () => {
+        return {
+            shouldPlaySound: false,
+            shouldShowAlert: true,
+            shouldSetBadge: true
+        }
+    }
+})
 
 const NotificationsScreen = () => {
   const triggerNotifHandler = () => {
     Notifications.scheduleNotificationAsync({
       content: { title: 'My first local Notif', body: 'This is the first local notif we are sending!' },
-      trigger: { seconds: 10 },
+      trigger: { seconds: 3 },
     });
   };
 
