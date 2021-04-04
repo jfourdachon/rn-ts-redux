@@ -13,6 +13,12 @@ import CustomHeaderButton from '../components/UI/HeaderButton';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
 
+export type ShopStackParamList = {
+    ProductsOverview: undefined
+    ProductDetail: {productId: string, productTitle: string}
+    Cart: undefined
+};
+
 export const defaultNavigationOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === 'android' ? Colors.primary : '',
@@ -26,7 +32,7 @@ export const defaultNavigationOptions = {
   },
 };
 
-const ProductsStackNavigator = createStackNavigator();
+const ProductsStackNavigator = createStackNavigator<ShopStackParamList>();
 
 export const ProductsNavigator = () => {
   return (
@@ -65,9 +71,9 @@ export const ProductsNavigator = () => {
       <ProductsStackNavigator.Screen
         name='ProductDetail'
         component={ProductDetailsScreen}
-        options={({ navigation }) => {
+        options={(props) => {
           return {
-            headerTitle: navigation.getParam('productTitle'),
+            headerTitle: props.route.params.productTitle
           };
         }}
       />
@@ -113,7 +119,13 @@ export const OrdersNavigator = () => {
   );
 };
 
-const AdminStackNavigator = createStackNavigator();
+
+export type AdminStackParamList = {
+    UserProducts: undefined
+    EditProduct: {submit: any, productId: string}
+};
+
+const AdminStackNavigator = createStackNavigator<AdminStackParamList>();
 
 export const AdminNavigator = () => {
   return (
@@ -152,19 +164,11 @@ export const AdminNavigator = () => {
       <AdminStackNavigator.Screen
         name='EditProduct'
         component={EditProductScreen}
-        options={({ navigation }) => {
-          const submitFn = navigation.getParam('submit');
+        options={(props) => {
+          const routeParams =  props.route.params ? props.route.params.productId : null
           return {
-            headerTitle: navigation.getParam('productId') ? 'Edit Product' : 'Add Product',
-            headerRight: () => (
-              <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-                <Item
-                  title='Save'
-                  iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
-                  onPress={submitFn}
-                />
-              </HeaderButtons>
-            ),
+            headerTitle: routeParams ? 'Edit Product' : 'Add Product',
+   
           };
         }}
       />
