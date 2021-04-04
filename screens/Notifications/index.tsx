@@ -35,6 +35,23 @@ const NotificationsScreen = () => {
     };
     checkPermission();
   }, []);
+
+useEffect(() => {
+    const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+        // Any code we want here, navigate / http requests ...
+        console.log({response})
+    })
+
+    const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+        // Any code we want here, navigate / http requests ...
+        console.log(notification)
+    })
+    return () => {
+        foregroundSubscription.remove()
+        backgroundSubscription.remove()
+    }
+},[])
+
   return (
     <View style={styles.screen}>
       <Button title='Trigger notification' onPress={triggerNotifHandler} />
