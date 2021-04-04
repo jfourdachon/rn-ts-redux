@@ -52,9 +52,11 @@ export const fetchProducts = (): ThunkAction<Promise<Product[]>, ROOT_STATE, unk
 };
 
 export const deleteProduct = (productId: string): ThunkAction<Promise<void>, ROOT_STATE, unknown, DeleteProduct>  => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token
+
     const response = await fetch(
-      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${productId}.json`,
+      `https://rn-ts-redux-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
@@ -62,6 +64,7 @@ export const deleteProduct = (productId: string): ThunkAction<Promise<void>, ROO
     if(!response.ok) {
       throw Error('something went wrong')
     }
+    console.log({response})
     dispatch ({ type: DELETE_PRODUCT, id: productId });
   }
 };
