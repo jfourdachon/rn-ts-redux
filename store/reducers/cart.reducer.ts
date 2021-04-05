@@ -18,6 +18,7 @@ export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS | PRO
             const addedProduct = action.product
             const productPrice = addedProduct.price
             const productTitle = addedProduct.title
+            const pushToken = addedProduct.pushToken
             let updatedOrNewCartItem
 
             if (state.items[addedProduct.id]) {
@@ -26,11 +27,12 @@ export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS | PRO
                     state.items[addedProduct.id].quantity + 1,
                     productPrice,
                     productTitle,
+                    pushToken,
                     state.items[addedProduct.id].sum + productPrice
                 )
 
             } else {
-                updatedOrNewCartItem = new CartItem(1, productPrice, productTitle, productPrice)
+                updatedOrNewCartItem = new CartItem(1, productPrice, productTitle, pushToken, productPrice)
 
             }
 
@@ -44,7 +46,7 @@ export default (state = initialState, action: CART_ACTIONS | ORDER_ACTIONS | PRO
             const curretnQty = selectedItem.quantity
             let updatedCartItems
             if (curretnQty > 1) {
-                const updatedcartItem = new CartItem(selectedItem.quantity - 1, selectedItem.productPrice, selectedItem.productTitle, selectedItem.sum - selectedItem.productPrice)
+                const updatedcartItem = new CartItem(selectedItem.quantity - 1, selectedItem.productPrice, selectedItem.productTitle, selectedItem.pushToken , selectedItem.sum - selectedItem.productPrice)
                 updatedCartItems = { ...state.items, [action.id]: updatedcartItem }
 
             } else {

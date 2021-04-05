@@ -30,6 +30,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
         productPrice: state.cart.items[key].productPrice,
         quantity: state.cart.items[key].quantity,
         sum: state.cart.items[key].sum,
+        pushToken: state.cart.items[key].pushToken
       });
     }
     return transformedCartItems.sort((a, b) => (a.id > b.id ? 1 : -1));

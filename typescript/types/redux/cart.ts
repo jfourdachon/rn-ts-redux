@@ -19,7 +19,7 @@ export type CART_ACTIONS = AddToCartAction | RemoveFromCartAction
 /* Reducer */
 
 export type ItemCart = {
-    [id: string]: { productPrice: number, quantity: number, productTitle: string, sum: number };
+    [id: string]: { productPrice: number, quantity: number, productTitle: string, sum: number, pushToken: string };
 }
 
 

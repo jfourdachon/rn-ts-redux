@@ -27,7 +27,7 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/rn-icon.png"
     }
   }
 }
