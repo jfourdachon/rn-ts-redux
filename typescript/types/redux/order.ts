@@ -10,6 +10,7 @@ export type OrderItem = {
         productPrice: number,
         quantity: number,
         sum: number,
+        pushToken: string
 }
 export type AddOrder = {
     type: typeof ADD_ORDER

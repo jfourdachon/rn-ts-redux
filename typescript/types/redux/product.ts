@@ -23,8 +23,8 @@ export type CreateProduct = {
         description: string
         price: number
         ownerId: string
+        pushToken: string | null
     }
-    dispatch: () => void
 }
 
 export type UpdateProduct = {

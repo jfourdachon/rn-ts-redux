@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
@@ -14,11 +14,32 @@ Notifications.setNotificationHandler({
 });
 
 const NotificationsScreen = () => {
-  const triggerNotifHandler = () => {
+const [pushToken, setPushToken] = useState('')
+
+  const triggerNotifHandler = async () => {
+    // LOCAL NOTIFICATIONS
     // Notifications.scheduleNotificationAsync({
     //   content: { title: 'My first local Notif', body: 'This is the first local notif we are sending!' },
     //   trigger: { seconds: 3 },
     // });
+
+    const message = {
+        to: pushToken,
+        sound: 'default',
+        title: 'Original Title',
+        body: 'And here is the body!',
+        data: { someData: 'goes here' },
+      };
+    
+      await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+      });
   };
 
   const getExpoNotificationsToken = async () => {
@@ -31,7 +52,8 @@ const NotificationsScreen = () => {
       }
     }
     const response = await Notifications.getExpoPushTokenAsync()
-    console.log(response.data)
+    // Http request to save the push token in the user DB
+    setPushToken(response.data)
   };
 
   useEffect(() => {
