@@ -74,7 +74,6 @@ export const addOrder = (
         }
 
         const respData = await response.json();
-        console.log(respData)
         dispatch({
             type: ADD_ORDER,
             orderData: {

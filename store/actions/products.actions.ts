@@ -68,7 +68,6 @@ export const deleteProduct = (productId: string): ThunkAction<Promise<void>, ROO
         if (!response.ok) {
             throw Error('something went wrong')
         }
-        console.log({ response })
         dispatch({ type: DELETE_PRODUCT, id: productId });
     }
 };
@@ -109,7 +108,7 @@ export const createProduct = (
                     price,
                     description,
                     ownerId: userId,
-                    ownerPushToken: pushToken
+                    pushToken: pushToken
                 }),
             }
         );
